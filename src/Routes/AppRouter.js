@@ -5,74 +5,62 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Login from "../Components/Auth/Login";
-import Register from "../Components/Auth/Register";
-import RecoverPassword from "../Components/Auth/RecoverPassword";
-import AdminRouter from "./AdminRouter";
+import { PrivateRouter } from "./PrivateRouter";
 import AuthContext from "../Context/Auth/AuthContext";
-import { Grid } from "@mui/material";
 import LoadingComponent from "../Components/Loading/LoadingComponent";
-import PrivateRouter from "./PrivateRouter";
-import PublicRouter from "./PublicRouter";
+import SuperAdminRoutes from "./SuperAdminRoutes";
 
 const AppRouter = () => {
-  const { authenticated, AuthenticatedUser, loading, errorAuth } = useContext(AuthContext);
+  const { authenticated, AuthenticatedUser, loading, loginExterno, errorAuth } =
+    useContext(AuthContext);
+
+  const location = window.location;
+  const params = new URLSearchParams(location.search);
+  const collaborator_number = params.get("collaborator_number");
+  const [showLoader, setShowLoader] = React.useState(true);
 
   useEffect(() => {
-    AuthenticatedUser();
+    if (collaborator_number) {
+      loginExterno(collaborator_number);
+    } else {
+      AuthenticatedUser();
+    }
   }, []);
 
-  if (loading) {
-    return (
-      <Grid size={{ xs: 12 }}>
-        <LoadingComponent />
-      </Grid>
-    );
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => setShowLoader(false), 800);
+    }
+  }, [loading]);
+
+  if (showLoader) {
+    return <LoadingComponent loading={loading} />;
   }
 
-  if (!AuthenticatedUser && errorAuth) {
-    return <Navigate to="/" replace />;
-  }
+  // if (!authenticated && errorAuth) {
+  //   window.location.href = "https://ldrhsys.ldrhumanresources.com/";
+  //   return null;
+  // }
 
-  const type_user = localStorage.getItem("type_user");
+  const role_id = localStorage.getItem("role_id");
+  let PrivateComponent = null;
+  if (role_id === "1" || role_id === "2") PrivateComponent = SuperAdminRoutes;
 
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PublicRouter isAuthenticated={authenticated}>
-              <Login />
-            </PublicRouter>
-          }
-        />
+        {authenticated && PrivateComponent && (
+          <Route path="/" element={<Navigate to="/Inicio" replace />} />
+        )}
 
-        <Route
-          path="/register"
-          element={
-            <PublicRouter isAuthenticated={authenticated}>
-              <Register />
-            </PublicRouter>
-          }
-        />
-
-        <Route
-          path="/recover-password"
-          element={
-            <PublicRouter isAuthenticated={authenticated}>
-              <RecoverPassword />
-            </PublicRouter>
-          }
-        />
-
-        {type_user === "1" && (
+        {PrivateComponent && (
           <Route
             path="/*"
             element={
-              <PrivateRouter isAuthenticated={authenticated}>
-                <AdminRouter />
-              </PrivateRouter>
+              <PrivateRouter
+                component={PrivateComponent}
+                isAuthenticated={authenticated}
+              />
             }
           />
         )}

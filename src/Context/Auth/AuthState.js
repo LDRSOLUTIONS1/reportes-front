@@ -28,8 +28,8 @@ const AuthState = (props) => {
 
     MethodGet("/user")
       .then(({ data }) => {
-        //localStorage.setItem("rolid", data.user.rolid);
-        //localStorage.setItem("idusuario", data.user.idusuario);
+        localStorage.setItem("role_id", data.user.role_id);
+        localStorage.setItem("id", data.user.id);
         dispatch({
           type: GET_USER,
           payload: data,
@@ -42,6 +42,37 @@ const AuthState = (props) => {
       });
   };
 
+  const loginExterno = async (collaborator_number) => {
+    try {
+      const { data } = await MethodPost(`/login/${collaborator_number}`);
+
+      localStorage.setItem("token", data.token);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: data,
+      });
+
+      await AuthenticatedUser();
+    } catch (error) {
+      dispatch({
+        type: LOGIN_ERROR,
+      });
+    }
+  };
+
+  const loginExternoo = async () => {
+    try {
+      const { data } = await MethodPost(`/login`);
+      localStorage.setItem("token", data.token);
+      tokenAuth(data.token);
+      //dispatch({ type: LOGIN_SUCCESS, payload: data });
+      await AuthenticatedUser();
+    } catch (error) {
+      dispatch({ type: LOGIN_ERROR });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -52,6 +83,7 @@ const AuthState = (props) => {
         loading: state.loading,
         errorAuth: state.errorAuth,
         AuthenticatedUser,
+        loginExterno,
       }}
     >
       {props.children}
