@@ -21,11 +21,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { dateFormatter } from "../../Utils/dateFormatter";
 import { EstadoChip } from "../../Utils/EstadoChip";
 
-const ModalDetalleRoles = ({ open, handleClose, role }) => {
+const ModalDetalleUsuarios = ({ open, handleClose, usuario }) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
-  if (!role) return null;
+  if (!usuario) return null;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -55,7 +55,7 @@ const ModalDetalleRoles = ({ open, handleClose, role }) => {
           alignItems="center"
         >
           <Typography variant="h6" fontWeight={700}>
-            Detalle del rol
+            Detalle del usuario
           </Typography>
 
           <IconButton onClick={handleClose}>
@@ -102,15 +102,14 @@ const ModalDetalleRoles = ({ open, handleClose, role }) => {
           <Table>
             <TableBody>
               {[
-                { label: "Id", value: role.id },
-                { label: "Rol", value: role.name },
+                { label: "Id", value: usuario.id },
                 {
                   label: "Creado en",
-                  value: dateFormatter(role.created_at),
+                  value: dateFormatter(usuario.created_at),
                 },
                 {
                   label: "Estatus",
-                  value: <EstadoChip estado={role.estado} />,
+                  value: <EstadoChip estado={usuario.estado} />,
                 },
               ].map((row, index) => (
                 <TableRow
@@ -148,4 +147,4 @@ const ModalDetalleRoles = ({ open, handleClose, role }) => {
   );
 };
 
-export default ModalDetalleRoles;
+export default ModalDetalleUsuarios;

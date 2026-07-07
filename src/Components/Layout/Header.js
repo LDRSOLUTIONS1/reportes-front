@@ -34,6 +34,12 @@ const MODULOS = [
     icon: <GroupIcon />,
   },
   {
+    id: 4,
+    segment: "Modulos",
+    title: "Modulos",
+    icon: <DescriptionIcon />,
+  },
+  {
     id: 3,
     segment: "Roles",
     title: "Roles",
@@ -101,17 +107,17 @@ export default function Header({ children }) {
 
       {
         segment: "volver-intranet",
-        title: "Return to intranet",
+        title: "Regresar a la intranet",
         icon: <KeyboardReturnIcon />,
       },
       {
         segment: "manual-usuario",
-        title: "User manual",
+        title: "Manual de usuario",
         icon: <DescriptionIcon />,
       },
       {
         segment: "cerrar-sesion",
-        title: "Log out",
+        title: "Cerrar sesión",
         icon: <LogoutIcon />,
       },
     ];

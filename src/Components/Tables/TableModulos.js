@@ -2,25 +2,25 @@ import React, { useContext, useState } from "react";
 import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import ModalDetalleRoles from "../Modals/ModalDetalleRoles";
-import RolesContext from "../../Context/Roles/RolesContext";
+import ModalDetalleModulos from "../Modals/ModalDetalleModulos";
+import ModulosContext from "../../Context/Modulos/ModulosContext";
 import EditIcon from "@mui/icons-material/Edit";
 import { dateFormatter } from "../../Utils/dateFormatter";
-import EditRoles from "../../Moduls/Roles/EditRoles";
+import EditModulos from "../../Moduls/Modulos/EditModulos";
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
-import AddRoles from "../../Moduls/Roles/AddRoles";
+import AddModulos from "../../Moduls/Modulos/AddModulos";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
 
-export default function TableRoles({ rows = [] }) {
-  const { role, GetRole } = useContext(RolesContext);
+export default function TableModulos({ rows = [] }) {
+  const { modulo, GetModulo } = useContext(ModulosContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [openModal, setOpenModal] = useState(false);
   const handleClickOpen = async (id) => {
-    await GetRole(id);
+    await GetModulo(id);
     setOpenModal(true);
   };
   const handleClose = () => {
@@ -28,14 +28,14 @@ export default function TableRoles({ rows = [] }) {
   };
 
   const [modalUpdate, OpenModalUpdate] = useState(false);
-  const [id_role, saveIdRole] = useState(null);
+  const [id_modulo, saveIdModulo] = useState(null);
   const handleClickOpenEdit = (id) => {
     OpenModalUpdate(true);
-    saveIdRole(id);
+    saveIdModulo(id);
   };
   const handleClickCloseEdit = () => {
     OpenModalUpdate(false);
-    saveIdRole(null);
+    saveIdModulo(null);
   };
 
   const [modalAdd, setOpenModalAdd] = useState(false);
@@ -125,7 +125,7 @@ export default function TableRoles({ rows = [] }) {
         }}
       >
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-          Lista de roles
+          Lista de modulos
         </Typography>
 
         <Box
@@ -167,7 +167,7 @@ export default function TableRoles({ rows = [] }) {
                     onClick={handleClickOpenAdd}
                     sx={{ borderRadius: 3 }}
                   >
-                    Nuevo rol
+                    Nuevo modulo
                   </Button>
                 </Box>
               ),
@@ -218,21 +218,21 @@ export default function TableRoles({ rows = [] }) {
           />
         </Box>
       </Paper>
-      <ModalDetalleRoles
+      <ModalDetalleModulos
         open={openModal}
         handleClose={handleClose}
-        role={role}
+        modulo={modulo}
       />
 
-      {id_role !== null && (
-        <EditRoles
+      {id_modulo !== null && (
+        <EditModulos
           open={modalUpdate}
           handleClose={handleClickCloseEdit}
-          id={id_role}
+          id={id_modulo}
         />
       )}
 
-      <AddRoles open={modalAdd} handleClose={handleClickCloseAdd} />
+      <AddModulos open={modalAdd} handleClose={handleClickCloseAdd} />
     </>
   );
 }

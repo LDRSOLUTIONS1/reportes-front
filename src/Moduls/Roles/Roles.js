@@ -5,7 +5,6 @@ import TableRoles from "../../Components/Tables/TableRoles";
 
 const Roles = () => {
   const { roles, GetRoles } = useContext(RolesContext);
-  console.log(roles);
 
   useEffect(() => {
     GetRoles();
