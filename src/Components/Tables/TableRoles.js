@@ -50,12 +50,12 @@ export default function TableRoles({ rows = [] }) {
   const columns = [
     {
       field: "actions",
-      type: "actions",
       headerName: "Acciones",
       flex: 0.5,
       align: "center",
       headerAlign: "center",
-      minWidth: 200,
+      minWidth: 50,
+      type: "actions",
       getActions: (params) => {
         const actions = [
           <GridActionsCellItem
@@ -74,13 +74,12 @@ export default function TableRoles({ rows = [] }) {
     },
     {
       field: "id",
-      headerName: "Id",
+      headerName: "Id", 
       flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 100,
     },
-
     {
       field: "name",
       headerName: "Rol",

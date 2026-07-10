@@ -1,12 +1,10 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import LogoutIcon from "@mui/icons-material/Logout";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { createTheme } from "@mui/material/styles";
-import AuthContext from "../../Context/Auth/AuthContext";
 import LogoDinamico from "./LogoDinamico";
 import { tienePermisoMenu } from "../../Utils/roles";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -34,16 +32,16 @@ const MODULOS = [
     icon: <GroupIcon />,
   },
   {
-    id: 4,
-    segment: "Modulos",
-    title: "Modulos",
-    icon: <DescriptionIcon />,
-  },
-  {
     id: 3,
     segment: "Roles",
     title: "Roles",
     icon: <SecurityIcon />,
+  },
+  {
+    id: 4,
+    segment: "Modulos",
+    title: "Modulos",
+    icon: <DescriptionIcon />,
   },
 ];
 
@@ -66,7 +64,6 @@ const construirMenu = (role_id) => {
 };
 
 export default function Header({ children }) {
-  const { cerrarSesion } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -85,15 +82,10 @@ export default function Header({ children }) {
           return;
         }
 
-        if (path === "/cerrar-sesion") {
-          cerrarSesion();
-          return;
-        }
-
         navigate(path);
       },
     }),
-    [location.pathname, navigate, cerrarSesion],
+    [location.pathname, navigate],
   );
 
   const role_id = Number(localStorage.getItem("role_id"));
@@ -114,11 +106,6 @@ export default function Header({ children }) {
         segment: "manual-usuario",
         title: "Manual de usuario",
         icon: <DescriptionIcon />,
-      },
-      {
-        segment: "cerrar-sesion",
-        title: "Cerrar sesión",
-        icon: <LogoutIcon />,
       },
     ];
   }, [role_id]);

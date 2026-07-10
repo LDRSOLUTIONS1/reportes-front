@@ -41,7 +41,7 @@ const AppRouter = () => {
   //   window.location.href = "https://ldrhsys.ldrhumanresources.com/";
   //   return null;
   // }
-
+  
   const role_id = localStorage.getItem("role_id");
   let PrivateComponent = null;
   if (role_id === "1" || role_id === "2") PrivateComponent = SuperAdminRoutes;

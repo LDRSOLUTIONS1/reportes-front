@@ -73,7 +73,7 @@ const ModulosState = ({ children }) => {
         dispatch({ type: ADD_MODULOS, payload: res.data });
         Swal.fire({
           title: "Éxito",
-          text: "Modulo creado correctamente",
+          text: "Módulo creado correctamente",
           icon: "success",
         });
         GetModulos();
@@ -87,7 +87,7 @@ const ModulosState = ({ children }) => {
         dispatch({ type: EDIT_MODULOS, payload: res.data });
         Swal.fire({
           title: "Éxito",
-          text: "Modulo actualizado correctamente",
+          text: "Módulo actualizado correctamente",
           icon: "success",
         });
         GetModulos();

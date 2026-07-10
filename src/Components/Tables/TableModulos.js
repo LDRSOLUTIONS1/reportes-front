@@ -50,12 +50,12 @@ export default function TableModulos({ rows = [] }) {
   const columns = [
     {
       field: "actions",
-      type: "actions",
       headerName: "Acciones",
       flex: 0.5,
       align: "center",
       headerAlign: "center",
-      minWidth: 200,
+      minWidth: 50,
+      type: "actions",
       getActions: (params) => {
         const actions = [
           <GridActionsCellItem
@@ -80,10 +80,33 @@ export default function TableModulos({ rows = [] }) {
       headerAlign: "center",
       minWidth: 100,
     },
-
     {
       field: "name",
-      headerName: "Rol",
+      headerName: "Módulo",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "title",
+      headerName: "Título",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "segment",
+      headerName: "Segmento",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "icon",
+      headerName: "Icono",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -125,7 +148,7 @@ export default function TableModulos({ rows = [] }) {
         }}
       >
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-          Lista de modulos
+          Lista de módulos
         </Typography>
 
         <Box
@@ -167,7 +190,7 @@ export default function TableModulos({ rows = [] }) {
                     onClick={handleClickOpenAdd}
                     sx={{ borderRadius: 3 }}
                   >
-                    Nuevo modulo
+                    Nuevo módulo
                   </Button>
                 </Box>
               ),

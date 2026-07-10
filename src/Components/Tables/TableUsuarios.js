@@ -23,7 +23,7 @@ export default function TableUsuarios({ rows = [] }) {
     await GetUsuario(id);
     setOpenModal(true);
   };
-  
+
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -51,12 +51,12 @@ export default function TableUsuarios({ rows = [] }) {
   const columns = [
     {
       field: "actions",
-      type: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      flex: 0.5,  
       align: "center",
       headerAlign: "center",
-      minWidth: 200,
+      minWidth: 50,
+      type: "actions",
       getActions: (params) => {
         const actions = [
           <GridActionsCellItem
