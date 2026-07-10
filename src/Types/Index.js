@@ -19,3 +19,9 @@ export const GET_MODULOS = "GET_MODULOS";
 export const ADD_MODULOS = "ADD_MODULOS";
 export const SHOW_MODULOS = "SHOW_MODULOS";
 export const EDIT_MODULOS = "EDIT_MODULOS";
+
+//Visitas
+export const GET_VISITAS = "GET_VISITAS";
+export const ADD_VISITAS = "ADD_VISITAS";
+export const SHOW_VISITAS = "SHOW_VISITAS";
+export const EDIT_VISITAS = "EDIT_VISITAS";

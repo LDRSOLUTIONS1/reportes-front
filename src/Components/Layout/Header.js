@@ -10,6 +10,7 @@ import { tienePermisoMenu } from "../../Utils/roles";
 import DescriptionIcon from "@mui/icons-material/Description";
 import GroupIcon from "@mui/icons-material/Group";
 import SecurityIcon from "@mui/icons-material/Security";
+import TourIcon from "@mui/icons-material/Tour";
 
 const theme = createTheme({
   cssVariables: {
@@ -24,6 +25,12 @@ const MODULOS = [
     segment: "Inicio",
     title: "Inicio",
     icon: <DashboardIcon />,
+  },
+  {
+    id: 5,
+    segment: "Visitas",
+    title: "Visitas",
+    icon: <TourIcon />,
   },
   {
     id: 2,
