@@ -6,19 +6,20 @@ import ModalDetalleVisitas from "../Modals/ModalDetalleVisitas";
 import VisitasContext from "../../Context/Visitas/VisitasContext";
 import EditIcon from "@mui/icons-material/Edit";
 import { dateFormatter } from "../../Utils/dateFormatter";
-import EditVisitas from "../../Moduls/Visitas/EditVisitas";
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
-import AddVisitas from "../../Moduls/Visitas/AddVisitas";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
+import { useNavigate } from "react-router-dom";
 
 export default function TableVisitas({ rows = [] }) {
   const { visita, GetVisita } = useContext(VisitasContext);
   const theme = useTheme();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [openModal, setOpenModal] = useState(false);
+
   const handleClickOpen = async (id) => {
     await GetVisita(id);
     setOpenModal(true);
@@ -27,36 +28,37 @@ export default function TableVisitas({ rows = [] }) {
     setOpenModal(false);
   };
 
-  const [modalUpdate, OpenModalUpdate] = useState(false);
-  const [id_visita, saveIdVisita] = useState(null);
-  const handleClickOpenEdit = (id) => {
-    OpenModalUpdate(true);
-    saveIdVisita(id);
-  };
-  const handleClickCloseEdit = () => {
-    OpenModalUpdate(false);
-    saveIdVisita(null);
-  };
+  const visit_type = [
+    { id: "cliente_directo", nombre: "Cliente directo" },
+    { id: "distribuidor", nombre: "Distribuidor" },
+  ];
 
-  const [modalAdd, setOpenModalAdd] = useState(false);
-  const handleClickOpenAdd = () => {
-    setOpenModalAdd(true);
-  };
+  const tipo_visita = [
+    { id: "presentacion_comercial", nombre: "Presentación comercial" },
+    { id: "capacitacion_operativa", nombre: "Capacitación operativa" },
+    { id: "capacitacion_producto", nombre: "Capacitación producto" },
+    { id: "acompanamiento_comercial", nombre: "Acompañamiento comercial" },
+    { id: "operativa", nombre: "Operativa" },
+    { id: "otro", nombre: "Otro" },
+  ];
 
-  const handleClickCloseAdd = () => {
-    setOpenModalAdd(false);
-  };
+  const visitTypeMap = Object.fromEntries(
+    visit_type.map((item) => [item.id, item.nombre]),
+  );
+
+  const tipoVisitaMap = Object.fromEntries(
+    tipo_visita.map((item) => [item.id, item.nombre]),
+  );
 
   const columns = [
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 50,
       type: "actions",
-
       getActions: (params) => {
         const actions = [
           <GridActionsCellItem
@@ -67,7 +69,7 @@ export default function TableVisitas({ rows = [] }) {
           <GridActionsCellItem
             icon={<EditIcon sx={{ color: "#ed6c02" }} />}
             label="Editar"
-            onClick={() => handleClickOpenEdit(params.id)}
+            onClick={() => navigate(`/EditarVisita/${params.id}`)}
           />,
         ];
         return actions;
@@ -75,11 +77,72 @@ export default function TableVisitas({ rows = [] }) {
     },
     {
       field: "id",
-      headerName: "Id", 
+      headerName: "Id",
       flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 100,
+    },
+    {
+      field: "visit_type",
+      headerName: "¿La visita comercial es para?",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+      valueGetter: (_, row) => visitTypeMap[row.visit_type] ?? row.visit_type,
+    },
+    {
+      field: "tipo_visita",
+      headerName: "Tipo de visita",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+      valueGetter: (_, row) =>
+        tipoVisitaMap[row.tipo_visita] ?? row.tipo_visita,
+    },
+    {
+      field: "objetivo",
+      headerName: "Objetivo de la visita",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "logros_estrategia",
+      headerName: "Logros/Estrategia",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "segmento",
+      headerName: "Segmento",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "fecha_visita",
+      headerName: "Fecha de la visita",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 220,
+      valueGetter: (_, row) => {
+        const inicio = dateFormatter(row.fecha_inicio);
+        const fin = dateFormatter(row.fecha_fin);
+
+        if (!row.fecha_fin || row.fecha_inicio === row.fecha_fin) {
+          return inicio;
+        }
+
+        return `${inicio} - ${fin}`;
+      },
     },
     {
       field: "created_at",
@@ -93,7 +156,7 @@ export default function TableVisitas({ rows = [] }) {
     {
       field: "estado",
       headerName: "Estatus",
-      flex: 0.5,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 100,
@@ -156,7 +219,7 @@ export default function TableVisitas({ rows = [] }) {
                   <Button
                     variant="contained"
                     startIcon={<AddIcon />}
-                    onClick={handleClickOpenAdd}
+                    onClick={() => navigate("/NuevaVisita")}
                     sx={{ borderRadius: 3 }}
                   >
                     Nueva visita
@@ -215,16 +278,6 @@ export default function TableVisitas({ rows = [] }) {
         handleClose={handleClose}
         visita={visita}
       />
-
-      {id_visita !== null && (
-        <EditVisitas
-          open={modalUpdate}
-          handleClose={handleClickCloseEdit}
-          id={id_visita}
-        />
-      )}
-
-      <AddVisitas open={modalAdd} handleClose={handleClickCloseAdd} />
     </>
   );
 }

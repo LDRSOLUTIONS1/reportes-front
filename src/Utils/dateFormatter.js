@@ -1,20 +1,36 @@
 export const dateFormatter = (dateString) => {
   if (!dateString) return "";
 
-  const fecha = new Date(dateString.replace(" ", "T"));
+  let fecha;
+  let mostrarHora = false;
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    const [year, month, day] = dateString.split("-");
+    fecha = new Date(year, month - 1, day);
+  } else {
+    fecha = new Date(dateString.replace(" ", "T"));
+    mostrarHora = true;
+  }
 
   if (isNaN(fecha)) return "";
 
-  const dia = fecha.toLocaleString("es-MX", { day: "2-digit" });
-  const mes = fecha.toLocaleString("es-MX", { month: "short" });
-  const anio = fecha.toLocaleString("es-MX", { year: "numeric" });
-  const hora = fecha.toLocaleString("es-MX", {
+  const opcionesFecha = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  };
+
+  const fechaTexto = fecha.toLocaleDateString("es-MX", opcionesFecha);
+
+  if (!mostrarHora) {
+    return fechaTexto;
+  }
+
+  const horaTexto = fecha.toLocaleTimeString("es-MX", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
   });
 
-  const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
-
-  return `${dia} ${mesCapitalizado} ${anio} - ${hora}`;
+  return `${fechaTexto} - ${horaTexto}`;
 };

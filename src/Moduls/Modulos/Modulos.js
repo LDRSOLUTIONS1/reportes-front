@@ -7,7 +7,7 @@ import TableModulos from "../../Components/Tables/TableModulos";
 const Modulos = () => {
   const { modulos, GetModulos } = useContext(ModulosContext);
 
-  useEffect(() => {
+  useEffect(() => { 
     GetModulos();
   }, []);
 
