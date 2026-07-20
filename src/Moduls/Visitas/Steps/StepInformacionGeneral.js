@@ -58,14 +58,8 @@ const StepInformacionGeneral = () => {
           InputLabelProps={{ shrink: true }}
           {...register("objetivo", {
             required: "Este campo es obligatorio",
-            minLength: {
-              value: 1,
-              message: "Mínimo 1 carácter",
-            },
-            maxLength: {
-              value: 100,
-              message: "Máximo 100 caracteres",
-            },
+            minLength: { value: 1, message: "Mínimo 1 carácter" },
+            maxLength: { value: 100, message: "Máximo 100 caracteres" },
           })}
           error={!!errors.objetivo}
           helperText={errors.objetivo?.message}
@@ -79,14 +73,8 @@ const StepInformacionGeneral = () => {
           InputLabelProps={{ shrink: true }}
           {...register("logros_estrategia", {
             required: "Este campo es obligatorio",
-            minLength: {
-              value: 1,
-              message: "Mínimo 1 carácter",
-            },
-            maxLength: {
-              value: 100,
-              message: "Máximo 100 caracteres",
-            },
+            minLength: { value: 1, message: "Mínimo 1 carácter" },
+            maxLength: { value: 100, message: "Máximo 100 caracteres" },
           })}
           error={!!errors.logros_estrategia}
           helperText={errors.logros_estrategia?.message}
@@ -100,14 +88,8 @@ const StepInformacionGeneral = () => {
           InputLabelProps={{ shrink: true }}
           {...register("segmento", {
             required: "Este campo es obligatorio",
-            minLength: {
-              value: 1,
-              message: "Mínimo 1 carácter",
-            },
-            maxLength: {
-              value: 100,
-              message: "Máximo 100 caracteres",
-            },
+            minLength: { value: 1, message: "Mínimo 1 carácter" },
+            maxLength: { value: 100, message: "Máximo 100 caracteres" },
           })}
           error={!!errors.segmento}
           helperText={errors.segmento?.message}

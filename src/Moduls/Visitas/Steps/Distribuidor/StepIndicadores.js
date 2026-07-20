@@ -1,6 +1,6 @@
 import React from 'react'
 
-const StepCapacitacion = () => {
+const StepIndicadores = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const StepCapacitacion = () => {
   )
 }
 
-export default StepCapacitacion
+export default StepIndicadores

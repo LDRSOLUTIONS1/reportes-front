@@ -1,116 +1,89 @@
-import React, { useEffect, useState } from "react";
-import { Box, Stepper, Step, StepLabel, Button, Paper } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Box,
+  Stepper,
+  Step,
+  StepLabel,
+  Button,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 
 import StepInformacionGeneral from "./StepInformacionGeneral";
-import StepInformacionComercial from "./StepInformacionComercial";
-import StepCapacitacion from "./StepCapacitacion";
-import StepResultados from "./StepResultados";
-import StepEvidencias from "./StepEvidencias";
+import ClienteDirectoSteps from "./ClienteDirectoSteps";
+import DistribuidorSteps from "./DistribuidorSteps";
 
-const steps = [
-  "Información General",
-  "Información Comercial",
-  "Capacitación",
-  "Resultados",
-  "Evidencias",
-];
+const stepInformacionGeneral = {
+  label: "Información General",
+  component: StepInformacionGeneral,
+  fields: [
+    "visit_type",
+    "tipo_visita",
+    "objetivo",
+    "logros_estrategia",
+    "segmento",
+    "fecha_inicio",
+    "fecha_fin",
+  ],
+};
 
 const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
-  const methods = useForm({
-    defaultValues,
-    mode: "onChange",
-  });
-
+  const methods = useForm({ defaultValues, mode: "onChange" });
   const [activeStep, setActiveStep] = useState(0);
 
- useEffect(() => {
-  if (defaultValues) {
-    methods.reset(defaultValues);
-  }
-}, [defaultValues, methods]);
+  const visitType = methods.watch("visit_type");
+
+  const steps = useMemo(() => {
+    if (visitType === "cliente_directo")
+      return [stepInformacionGeneral, ...ClienteDirectoSteps];
+    if (visitType === "distribuidor")
+      return [stepInformacionGeneral, ...DistribuidorSteps];
+    return [stepInformacionGeneral];
+  }, [visitType]);
+
+  useEffect(() => {
+    if (defaultValues) methods.reset(defaultValues);
+  }, [defaultValues, methods]);
+
+  // si cambia visit_type y el paso activo ya no existe en la nueva rama, regresa al inicio
+  useEffect(() => {
+    if (activeStep > steps.length - 1) setActiveStep(0);
+  }, [steps, activeStep]);
 
   const nextStep = async () => {
-    let fields = [];
-
-    switch (activeStep) {
-      case 0:
-        fields = [
-          "visit_type",
-          "tipo_visita",
-          "objetivo",
-          "logros_estrategia",
-          "segmento",
-          "fecha_inicio",
-          "fecha_fin",
-        ];
-        break;
-
-      case 1:
-        fields = [];
-        break;
-
-      case 2:
-        fields = [];
-        break;
-
-      case 3:
-        fields = [];
-        break;
-
-      default:
-        break;
-    }
-
+    const { fields } = steps[activeStep];
     const valid = await methods.trigger(fields);
-
     if (!valid) return;
-
     setActiveStep((prev) => prev + 1);
   };
 
-  const backStep = () => {
-    setActiveStep((prev) => prev - 1);
-  };
+  const backStep = () => setActiveStep((prev) => prev - 1);
 
-  const guardar = (data) => {
-    onSubmit(data);
-  };
+  const guardar = (data) => onSubmit(data);
 
-  const renderStep = () => {
-    switch (activeStep) {
-      case 0:
-        return <StepInformacionGeneral />;
-
-      case 1:
-        return <StepInformacionComercial />;
-
-      case 2:
-        return <StepCapacitacion />;
-
-      case 3:
-        return <StepResultados />;
-
-      case 4:
-        return <StepEvidencias />;
-
-      default:
-        return null;
-    }
-  };
+  const StepComponent = steps[activeStep]?.component;
 
   return (
     <FormProvider {...methods}>
       <Paper sx={{ p: 4 }}>
         <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 5 }}>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+          {steps.map((step) => (
+            <Step key={step.label}>
+              <StepLabel>{step.label}</StepLabel>
             </Step>
           ))}
         </Stepper>
 
-        <Box mb={4}>{renderStep()}</Box>
+        <Box mb={4}>
+          {StepComponent ? (
+            <StepComponent />
+          ) : (
+            <Typography color="text.secondary">
+              Selecciona el tipo de visita para continuar.
+            </Typography>
+          )}
+        </Box>
 
         <Box display="flex" justifyContent="space-between">
           <Button
@@ -126,7 +99,11 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
               {mode === "edit" ? "Actualizar" : "Guardar"}
             </Button>
           ) : (
-            <Button variant="contained" onClick={nextStep}>
+            <Button
+              variant="contained"
+              onClick={nextStep}
+              disabled={activeStep === 0 && !visitType}
+            >
               Siguiente
             </Button>
           )}
