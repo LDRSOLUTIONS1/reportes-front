@@ -45,20 +45,20 @@ const StepCapacitacion = () => {
           fullWidth
           label="N° Personas capacitadas"
           InputLabelProps={{ shrink: true }}
-          {...register("personas_capacitadas", {
+          {...register("num_personas", {
             required: "Este campo es obligatorio",
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
-          error={!!errors.personas_capacitadas}
-          helperText={errors.personas_capacitadas?.message}
+          error={!!errors.num_personas}
+          helperText={errors.num_personas?.message}
         />
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
         <TextField
           fullWidth
-          label="Comentarios"
+          label="comentarios"
           InputLabelProps={{ shrink: true }}
           {...register("comentarios", {
             required: "Este campo es obligatorio",

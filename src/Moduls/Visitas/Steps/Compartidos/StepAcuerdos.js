@@ -3,10 +3,10 @@ import RepeaterField from "../../../../Components/Forms/RepeaterField";
 
 const StepAcuerdos = () => (
   <RepeaterField
-    name="Acuerdos"
+    name="followup_agreements"
     addLabel="Agregar acuerdo"
     minRows={0}
-    maxRows={3}
+    maxRows={25}
     columns={[
       {
         name: "acuerdo",
@@ -21,7 +21,7 @@ const StepAcuerdos = () => (
         rules: { required: "Requerido" },
       },
       {
-        name: "fecha compromiso",
+        name: "fecha_compromiso",
         label: "Fecha de compromiso",
         type: "date",
         rules: { required: "Requerido" },

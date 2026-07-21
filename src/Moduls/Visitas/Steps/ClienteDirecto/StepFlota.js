@@ -3,7 +3,7 @@ import RepeaterField from "../../../../Components/Forms/RepeaterField";
 
 const StepFlota = () => (
   <RepeaterField
-    name="flota"
+    name="fleet_info"
     addLabel="Agregar vehículo"
     minRows={0}
     maxRows={25}

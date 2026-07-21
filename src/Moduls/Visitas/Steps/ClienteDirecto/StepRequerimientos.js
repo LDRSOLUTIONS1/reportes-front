@@ -6,12 +6,8 @@ import {
   Radio,
   RadioGroup,
   FormLabel,
-  Autocomplete,
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
-import { useState, useEffect } from "react";
-import MethodGet from "../../../../Config/Service";
-import SelectField from "../../../../Components/Forms/Select";
 
 const StepRequerimientos = () => {
   const {
@@ -19,14 +15,6 @@ const StepRequerimientos = () => {
     control,
     formState: { errors },
   } = useFormContext();
-
-  const [distribuidores, setDistribuidores] = useState([]);
-
-  useEffect(() => {
-    MethodGet("https://apiclientes.ldrhumanresources.com/api/distribuidores")
-      .then((res) => setDistribuidores(res.data))
-      .catch(console.log);
-  }, []);
 
   return (
     <Grid container spacing={2}>
@@ -121,29 +109,17 @@ const StepRequerimientos = () => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <Controller
-          name="distribuidor_id"
-          control={control}
-          rules={{ required: "Selecciona un distribuidor" }}
-          render={({ field }) => (
-            <Autocomplete
-              options={distribuidores}
-              value={distribuidores.find((d) => d.id === field.value) || null}
-              onChange={(_, value) => field.onChange(value?.id || null)}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              getOptionLabel={(option) =>
-                `${option.nombre_comercial} - ${option.razon_social}`
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Distribuidor"
-                  error={!!errors.distribuidor_id}
-                  helperText={errors.distribuidor_id?.message}
-                />
-              )}
-            />
-          )}
+        <TextField
+          fullWidth
+          label="Distribuidor"
+          InputLabelProps={{ shrink: true }}
+          {...register("distribuidor", {
+            required: "Este campo es obligatorio",
+            minLength: { value: 1, message: "Mínimo 1 caracteres" },
+            maxLength: { value: 255, message: "Máximo 255 caracteres" },
+          })}
+          error={!!errors.distribuidor}
+          helperText={errors.distribuidor?.message}
         />
       </Grid>
 
