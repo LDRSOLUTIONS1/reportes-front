@@ -107,6 +107,30 @@ export default function RepeaterField({
                     );
                   }
 
+                  if (col.type === "textarea") {
+                    return (
+                      <TableCell key={col.name} sx={{ minWidth: 260 }}>
+                        <Controller
+                          name={fieldName}
+                          control={control}
+                          defaultValue=""
+                          rules={col.rules}
+                          render={({ field: controllerField }) => (
+                            <TextField
+                              {...controllerField}
+                              fullWidth
+                              multiline
+                              minRows={2}
+                              size="small"
+                              error={!!fieldError}
+                              helperText={fieldError?.message}
+                            />
+                          )}
+                        />
+                      </TableCell>
+                    );
+                  }
+
                   return (
                     <TableCell key={col.name} sx={{ minWidth: 140 }}>
                       <Controller

@@ -24,6 +24,7 @@ const StepInformacionGeneral = () => {
     { id: "capacitacion_producto", nombre: "Capacitación producto" },
     { id: "acompanamiento_comercial", nombre: "Acompañamiento comercial" },
     { id: "operativa", nombre: "Operativa" },
+    { id: "capacitacion", nombre: "Capacitación" },
     { id: "otro", nombre: "Otro" },
   ];
 

@@ -12,8 +12,7 @@ export default function EditVisitas() {
 
   useEffect(() => {
     if (!id) return;
-
-    MethodGet(`/visitas/${id}`)
+    MethodGet(`/editarVisita/${id}`)
       .then((res) => {
         setVisita(res.data);
       })

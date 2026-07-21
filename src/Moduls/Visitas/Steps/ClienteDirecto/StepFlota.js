@@ -21,7 +21,7 @@ const StepFlota = () => (
         rules: { required: "Requerido" },
       },
       {
-        name: "carga",
+        name: "capacidad_carga",
         label: "Cap. de carga",
         type: "number",
         rules: { required: "Requerido" },
@@ -33,22 +33,18 @@ const StepFlota = () => (
         rules: { required: "Requerido" },
       },
       {
-        name: "flota",
-        label: "Flota",
+        name: "porcentaje_flota",
+        label: "% Flota",
         type: "number",
-        rules: { required: "Requerido" },
+        rules: {
+          min: { value: 0, message: "Mínimo 0" },
+          max: { value: 100, message: "Máximo 100" },
+        },
       },
       {
         name: "comentarios_aplicacion",
         label: "Comentarios/Aplicación",
         type: "text",
-        rules: { required: "Requerido" },
-      },
-      {
-        name: "edad_promedio",
-        label: "Edad promedio de su flota",
-        type: "text",
-        rules: { required: "Requerido" },
       },
     ]}
   />

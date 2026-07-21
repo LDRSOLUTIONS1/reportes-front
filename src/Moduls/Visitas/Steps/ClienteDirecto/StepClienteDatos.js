@@ -152,6 +152,21 @@ const StepClienteDatos = () => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
+        <TextField
+          fullWidth
+          label="Edad promedio de la flota"
+          InputLabelProps={{ shrink: true }}
+          {...register("edad_promedio_flota", {
+            required: "Este campo es obligatorio",
+            minLength: { value: 1, message: "Mínimo 1 caracteres" },
+            maxLength: { value: 255, message: "Máximo 255 caracteres" },
+          })}
+          error={!!errors.edad_promedio_flota}
+          helperText={errors.edad_promedio_flota?.message}
+        />
+      </Grid>
+
+      <Grid size={{ xs: 12, sm: 6 }}>
         <Box display="flex" alignItems="center" gap={2}>
           <Avatar
             src={logoPreview}
