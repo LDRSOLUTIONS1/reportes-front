@@ -37,6 +37,7 @@ const StepClienteDatos = () => {
 
     setValue("logo_file", file);
     setValue("logo_preview", URL.createObjectURL(file));
+    setValue("logo_existente", false);
   };
 
   const handleRemoveLogo = () => {
@@ -46,6 +47,7 @@ const StepClienteDatos = () => {
 
     setValue("logo_file", null);
     setValue("logo_preview", "");
+    setValue("logo_existente", false);
   };
 
   return (

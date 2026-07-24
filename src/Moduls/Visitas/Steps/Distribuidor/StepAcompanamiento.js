@@ -10,7 +10,7 @@ const StepAcompanamiento = () => {
       </Typography>
 
       <RepeaterField
-        name="leads_pipeline"
+        name="leads"
         addLabel="Agregar cliente"
         emptyMessage="Sin clientes registrados"
         minRows={0}

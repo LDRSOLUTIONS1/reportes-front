@@ -32,11 +32,18 @@ export default function EditVisitas() {
 
         const requirements = data.client_visit?.requirements;
         const training_data = data.training_data;
+        const temasRevisados = {};
+
+        (data.distributor_visit?.temas_revisados || []).forEach((tema) => {
+          temasRevisados[tema] = true;
+        });
         setVisita({
           ...data,
           ...data.client_visit,
 
-          logo_preview: data.client_visit?.logo_path,
+          logo_preview: data.client_visit?.url,
+          logo_existente: true,
+          logo_path: data.client_visit?.logo_path,
 
           contactos:
             data.client_visit?.contacts?.map((contacto) => ({
@@ -82,6 +89,47 @@ export default function EditVisitas() {
             })) ?? [],
 
           ...training_data,
+
+          participantes:
+            data.distributor_visit?.participantes?.map((participante) => ({
+              nombre: participante.nombre,
+            })) ?? [],
+
+          temas_revisados: temasRevisados,
+
+          leads:
+            data.distributor_visit?.leads?.map((lead) => ({
+              id: lead.id,
+              cliente: lead.cliente,
+              modelo_interes: lead.modelo_interes,
+              porcentaje_avance: lead.porcentaje_avance,
+              comentarios: lead.comentarios,
+            })) ?? [],
+
+          distribuidor: data.distributor_visit?.distribuidor,
+          plaza: data.distributor_visit?.plaza,
+          grupo: data.distributor_visit?.grupo,
+
+          commercial_indicators:
+            data.distributor_visit?.commercial_indicators?.map((indicator) => ({
+              id: indicator.id,
+              modelo: indicator.modelo,
+              bp_2025: indicator.bp_2025,
+              whole_ytd: indicator.whole_ytd,
+              porcentaje_avance: indicator.porcentaje_avance,
+              retail_ytd: indicator.retail_ytd,
+              inventario: indicator.inventario,
+              back_order: indicator.back_order,
+            })) ?? [],
+
+          evidencias:
+            data.attachments?.map((file) => ({
+              id: file.id,
+              filename: file.filename,
+              tipo: file.tipo,
+              preview: file.url,
+              existente: true,
+            })) ?? [],
         });
       })
       .catch(console.log);

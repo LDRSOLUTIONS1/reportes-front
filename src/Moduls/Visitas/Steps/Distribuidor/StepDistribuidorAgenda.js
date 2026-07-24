@@ -50,13 +50,13 @@ const StepDistribuidorAgenda = () => {
       .catch(console.log);
   }, []);
 
-  const distribuidorSeleccionado = watch("distribuidor_id");
+  const distribuidorSeleccionado = watch("distribuidor");
 
   useEffect(() => {
     if (!distribuidorSeleccionado) return;
 
     const distribuidor = distribuidores.find(
-      (d) => d.id === Number(distribuidorSeleccionado),
+      (d) => d.nombre_comercial === distribuidorSeleccionado,
     );
 
     if (distribuidor) {
@@ -75,15 +75,19 @@ const StepDistribuidorAgenda = () => {
 
       <Grid size={{ xs: 12, sm: 4 }}>
         <Controller
-          name="distribuidor_id"
+          name="distribuidor"
           control={control}
           rules={{ required: "Seleccione un distribuidor" }}
           render={({ field }) => (
             <Autocomplete
               options={distribuidores}
-              value={distribuidores.find((d) => d.id === field.value) || null}
+              value={
+                distribuidores.find(
+                  (d) => d.nombre_comercial === field.value,
+                ) || null
+              }
               onChange={(_, value) => {
-                field.onChange(value?.id || null);
+                field.onChange(value?.nombre_comercial || "");
 
                 setValue("plaza", value?.plaza || "");
                 setValue("grupo", value?.grupo || "");
@@ -91,13 +95,15 @@ const StepDistribuidorAgenda = () => {
               getOptionLabel={(option) =>
                 `${option.nombre_comercial} - ${option.razon_social}`
               }
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+              isOptionEqualToValue={(option, value) =>
+                option.nombre_comercial === value.nombre_comercial
+              }
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Distribuidor"
-                  error={!!errors.distribuidor_id}
-                  helperText={errors.distribuidor_id?.message}
+                  error={!!errors.distribuidor}
+                  helperText={errors.distribuidor?.message}
                 />
               )}
             />
