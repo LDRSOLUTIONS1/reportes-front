@@ -60,7 +60,45 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
 
   const backStep = () => setActiveStep((prev) => prev - 1);
 
-  const guardar = (data) => onSubmit(data);
+  const guardar = (data) => {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === null || value === undefined) {
+        return;
+      }
+
+      // Archivos
+      if (value instanceof File) {
+        formData.append(key, value);
+        return;
+      }
+
+      // Arreglos u objetos
+      // if (typeof value === "object") {
+      //   formData.append(key, JSON.stringify(value));
+      //   return;
+      // }
+
+      if (key === "evidencias") {
+        value.forEach((item, index) => {
+          if (item.file instanceof File) {
+            formData.append(`evidencias[${index}]`, item.file);
+          }
+
+          if (item.id) {
+            formData.append(`evidencias_existentes[]`, item.id);
+          }
+        });
+
+        return;
+      }
+
+      formData.append(key, value);
+    });
+
+    onSubmit(formData);
+  };
 
   const StepComponent = steps[activeStep]?.component;
 

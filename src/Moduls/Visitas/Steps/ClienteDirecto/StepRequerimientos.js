@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   TextField,
@@ -6,15 +6,26 @@ import {
   Radio,
   RadioGroup,
   FormLabel,
+  Autocomplete,
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
+import MethodGet from "../../../../Config/Service";
 
 const StepRequerimientos = () => {
   const {
     register,
     control,
+    setValue,
     formState: { errors },
   } = useFormContext();
+
+  const [distribuidores, setDistribuidores] = useState([]);
+
+  useEffect(() => {
+    MethodGet("https://apiclientes.ldrhumanresources.com/api/distribuidores")
+      .then((res) => setDistribuidores(res.data))
+      .catch(console.log);
+  }, []);
 
   return (
     <Grid container spacing={2}>
@@ -109,17 +120,44 @@ const StepRequerimientos = () => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <TextField
-          fullWidth
-          label="Distribuidor"
-          InputLabelProps={{ shrink: true }}
-          {...register("distribuidor", {
+        <Controller
+          name="distribuidor"
+          control={control}
+          rules={{
             required: "Este campo es obligatorio",
-            minLength: { value: 1, message: "Mínimo 1 caracteres" },
-            maxLength: { value: 255, message: "Máximo 255 caracteres" },
-          })}
-          error={!!errors.distribuidor}
-          helperText={errors.distribuidor?.message}
+          }}
+          render={({ field }) => (
+            <Autocomplete
+              freeSolo
+              options={distribuidores}
+              getOptionLabel={(option) =>
+                typeof option === "string"
+                  ? option
+                  : option.nombre_comercial || ""
+              }
+              value={field.value || ""}
+              onChange={(event, newValue) => {
+                if (typeof newValue === "string") {
+                  field.onChange(newValue);
+                } else if (newValue) {
+                  field.onChange(newValue.nombre_comercial);
+                } else {
+                  field.onChange("");
+                }
+              }}
+              onInputChange={(event, newInputValue) => {
+                field.onChange(newInputValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Distribuidor"
+                  error={!!errors.distribuidor}
+                  helperText={errors.distribuidor?.message}
+                />
+              )}
+            />
+          )}
         />
       </Grid>
 

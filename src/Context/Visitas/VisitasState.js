@@ -81,8 +81,13 @@ const VisitasState = ({ children }) => {
       .catch(handleError);
   };
 
-  const EditVisitas = (data) => {
-    MethodPut(`/visitas/${data.id}`, data)
+  const EditVisitas = (id, data) => {
+    const request =
+      data instanceof FormData
+        ? MethodPost(`/editVisit/${id}?_method=PUT`, data, imageHeaders)
+        : MethodPut(`/editVisit/${id}`, data);
+
+    request
       .then((res) => {
         dispatch({ type: EDIT_VISITAS, payload: res.data });
         Swal.fire({

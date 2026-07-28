@@ -8,12 +8,12 @@ import VisitasContext from "../../Context/Visitas/VisitasContext";
 export default function EditVisitas() {
   const { id } = useParams();
   const [visita, setVisita] = useState(null);
-  const { EditVisitas } = useContext(VisitasContext);
+  const { EditVisitas } = useContext(VisitasContext); 
 
   useEffect(() => {
     if (!id) return;
 
-    MethodGet(`/editarVisita/${id}`)
+    MethodGet(`/getEditVisit/${id}`)
       .then((res) => {
         const data = res.data;
 
@@ -106,7 +106,8 @@ export default function EditVisitas() {
               comentarios: lead.comentarios,
             })) ?? [],
 
-          distribuidor: data.distributor_visit?.distribuidor,
+          distribuidor:
+            data.distributor_visit?.distribuidor ?? requirements?.distribuidor,
           plaza: data.distributor_visit?.plaza,
           grupo: data.distributor_visit?.grupo,
 
@@ -140,7 +141,7 @@ export default function EditVisitas() {
       <VisitaStepper
         mode="edit"
         defaultValues={visita}
-        onSubmit={EditVisitas}
+        onSubmit={(data) => EditVisitas(id, data)}
       />
     </Layout>
   );
