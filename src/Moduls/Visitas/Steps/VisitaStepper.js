@@ -94,6 +94,11 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
         return;
       }
 
+      if (typeof value === "object") {
+        formData.append(key, JSON.stringify(value));
+        return;
+      }
+
       formData.append(key, value);
     });
 

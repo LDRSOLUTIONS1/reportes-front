@@ -49,7 +49,7 @@ const StepEvidencias = () => {
       append({
         file,
         filename: file.name,
-        tipo: isImage ? "imagen" : "archivo",
+        tipo: isImage ? "foto" : "anexo",
         preview: isImage ? URL.createObjectURL(file) : null,
       });
     });
