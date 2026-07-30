@@ -23,8 +23,8 @@ const StepClienteDatos = () => {
 
   const tipo_cliente = [
     { id: "conquista", nombre: "Conquista" },
-    { id: "actual", nombre: "Actual" },
-    { id: "prospecto", nombre: "Prospecto" },
+    { id: "retencion", nombre: "Retencion" },
+    { id: "desarrollo", nombre: "Desarrollo" },
   ];
 
   const handleLogoChange = (e) => {
@@ -84,6 +84,7 @@ const StepClienteDatos = () => {
 
       <Grid size={{ xs: 12, sm: 6 }}>
         <TextField
+          type="number"
           fullWidth
           label="Tamaño de flota"
           InputLabelProps={{ shrink: true }}
@@ -155,6 +156,7 @@ const StepClienteDatos = () => {
 
       <Grid size={{ xs: 12, sm: 6 }}>
         <TextField
+          type="number"
           fullWidth
           label="Edad promedio de la flota"
           InputLabelProps={{ shrink: true }}

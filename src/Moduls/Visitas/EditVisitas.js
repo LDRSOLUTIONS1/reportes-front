@@ -8,7 +8,7 @@ import VisitasContext from "../../Context/Visitas/VisitasContext";
 export default function EditVisitas() {
   const { id } = useParams();
   const [visita, setVisita] = useState(null);
-  const { EditVisitas } = useContext(VisitasContext); 
+  const { EditVisitas } = useContext(VisitasContext);
 
   useEffect(() => {
     if (!id) return;
@@ -20,13 +20,24 @@ export default function EditVisitas() {
         const eventosAsistio = {};
         const eventosCandidato = {};
 
+        let eventosAsistioOtro = "";
+        let eventosCandidatoOtro = "";
+
         data.client_visit?.events?.forEach((evento) => {
           if (evento.tipo === "asistio") {
-            eventosAsistio[evento.nombre_evento] = true;
+            if (evento.nombre_evento === "otro") {
+              eventosAsistioOtro = evento.otro_evento ?? "";
+            } else {
+              eventosAsistio[evento.nombre_evento] = true;
+            }
           }
 
           if (evento.tipo === "candidato") {
-            eventosCandidato[evento.nombre_evento] = true;
+            if (evento.nombre_evento === "otro") {
+              eventosCandidatoOtro = evento.otro_evento ?? "";
+            } else {
+              eventosCandidato[evento.nombre_evento] = true;
+            }
           }
         });
 
@@ -74,6 +85,9 @@ export default function EditVisitas() {
 
           eventos_asistio: eventosAsistio,
           eventos_candidato: eventosCandidato,
+
+          eventos_asistio_otro: eventosAsistioOtro,
+          eventos_candidato_otro: eventosCandidatoOtro,
 
           ...requirements,
           demo: requirements?.demo ? "si" : "no",

@@ -1,12 +1,20 @@
 import React from "react";
 import { Grid, TextField } from "@mui/material";
 import { useFormContext } from "react-hook-form";
+import SelectField from "../../../../Components/Forms/Select";
 
 const StepCapacitacion = () => {
   const {
     register,
+    control,
     formState: { errors },
   } = useFormContext();
+
+  const tipos = [
+    { id: "tecnica", nombre: "Tecnica" },
+    { id: "comercial", nombre: "Comercial" },
+    { id: "operativa", nombre: "Operativa" },
+  ];
 
   return (
     <Grid container spacing={2}>
@@ -22,6 +30,17 @@ const StepCapacitacion = () => {
           })}
           error={!!errors.tipo}
           helperText={errors.tipo?.message}
+        />
+      </Grid>
+
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <SelectField
+          name="tipo"
+          label="Tipo"
+          control={control}
+          rules={{ required: "Este campo es obligatorio" }}
+          errors={errors}
+          options={tipos}
         />
       </Grid>
 
@@ -42,6 +61,7 @@ const StepCapacitacion = () => {
 
       <Grid size={{ xs: 12, sm: 6 }}>
         <TextField
+          type="number"
           fullWidth
           label="N° Personas capacitadas"
           InputLabelProps={{ shrink: true }}

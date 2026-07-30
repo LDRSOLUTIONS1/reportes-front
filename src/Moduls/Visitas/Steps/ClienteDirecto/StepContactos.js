@@ -23,7 +23,7 @@ const StepContactos = () => (
       {
         name: "email",
         label: "Email",
-        type: "text",
+        type: "email",
         rules: {
           pattern: { value: /^\S+@\S+\.\S+$/, message: "Email inválido" },
         },
@@ -31,7 +31,7 @@ const StepContactos = () => (
       {
         name: "telefono",
         label: "Teléfono",
-        type: "text",
+        type: "number",
         rules: { required: "Requerido" },
       },
     ]}

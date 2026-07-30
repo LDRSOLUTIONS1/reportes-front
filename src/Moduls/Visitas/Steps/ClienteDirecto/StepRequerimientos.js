@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import MethodGet from "../../../../Config/Service";
+import SelectField from "../../../../Components/Forms/Select";
 
 const StepRequerimientos = () => {
   const {
@@ -26,6 +27,13 @@ const StepRequerimientos = () => {
       .then((res) => setDistribuidores(res.data))
       .catch(console.log);
   }, []);
+
+  const financiamientos = [
+    { id: "credito_casa", nombre: "Crédito Casa" },
+    { id: "arrendamiento", nombre: "Arrendamiento" },
+    { id: "contado", nombre: "Contado" },
+    { id: "otro", nombre: "Otro" },
+  ];
 
   return (
     <Grid container spacing={2}>
@@ -75,17 +83,13 @@ const StepRequerimientos = () => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <TextField
-          fullWidth
+        <SelectField
+          name="financiamiento"
           label="Financiamiento"
-          InputLabelProps={{ shrink: true }}
-          {...register("financiamiento", {
-            required: "Este campo es obligatorio",
-            minLength: { value: 1, message: "Mínimo 1 caracteres" },
-            maxLength: { value: 255, message: "Máximo 255 caracteres" },
-          })}
-          error={!!errors.financiamiento}
-          helperText={errors.financiamiento?.message}
+          control={control}
+          rules={{ required: "Este campo es obligatorio" }}
+          errors={errors}
+          options={financiamientos}
         />
       </Grid>
 

@@ -78,7 +78,12 @@ const StepHistorialEventos = () => {
               defaultValue={false}
               render={({ field }) => (
                 <FormControlLabel
-                  control={<Checkbox checked={!!field.value} {...field} />}
+                  control={
+                    <Checkbox
+                      checked={!!field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  }
                   label={evento.nombre}
                 />
               )}
@@ -111,7 +116,12 @@ const StepHistorialEventos = () => {
               defaultValue={false}
               render={({ field }) => (
                 <FormControlLabel
-                  control={<Checkbox checked={!!field.value} {...field} />}
+                  control={
+                    <Checkbox
+                      checked={!!field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  }
                   label={evento.nombre}
                 />
               )}
