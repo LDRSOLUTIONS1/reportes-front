@@ -19,21 +19,6 @@ const StepCapacitacion = () => {
   return (
     <Grid container spacing={2}>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <TextField
-          fullWidth
-          label="Tipo"
-          InputLabelProps={{ shrink: true }}
-          {...register("tipo", {
-            required: "Este campo es obligatorio",
-            minLength: { value: 1, message: "Mínimo 1 caracteres" },
-            maxLength: { value: 255, message: "Máximo 255 caracteres" },
-          })}
-          error={!!errors.tipo}
-          helperText={errors.tipo?.message}
-        />
-      </Grid>
-
-      <Grid size={{ xs: 12, sm: 6 }}>
         <SelectField
           name="tipo"
           label="Tipo"
@@ -78,7 +63,7 @@ const StepCapacitacion = () => {
       <Grid size={{ xs: 12, sm: 6 }}>
         <TextField
           fullWidth
-          label="comentarios"
+          label="Comentarios"
           InputLabelProps={{ shrink: true }}
           {...register("comentarios", {
             required: "Este campo es obligatorio",

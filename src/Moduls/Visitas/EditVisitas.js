@@ -44,9 +44,34 @@ export default function EditVisitas() {
         const requirements = data.client_visit?.requirements;
         const training_data = data.training_data;
         const temasRevisados = {};
+        let temasRevisadosOtro = "";
+
+        const temasCatalogo = [
+          "back_order",
+          "bonos",
+          "estado_cuenta",
+          "estrategia_marketing",
+          "facturacion",
+          "fuerza_ventas",
+          "inventario_facturado",
+          "inventario_fisico",
+          "notas_credito",
+          "pedidos_nuevos",
+          "plan_comercial",
+          "plan_piso",
+          "posventa",
+          "programacion_citas",
+          "prospeccion_leads",
+          "retail",
+        ];
 
         (data.distributor_visit?.temas_revisados || []).forEach((tema) => {
-          temasRevisados[tema] = true;
+          if (temasCatalogo.includes(tema)) {
+            temasRevisados[tema] = true;
+          } else {
+            temasRevisadosOtro = tema;
+            temasRevisados.otros = true;
+          }
         });
         setVisita({
           ...data,
@@ -110,6 +135,7 @@ export default function EditVisitas() {
             })) ?? [],
 
           temas_revisados: temasRevisados,
+          temas_revisados_otro: temasRevisadosOtro,
 
           leads:
             data.distributor_visit?.leads?.map((lead) => ({

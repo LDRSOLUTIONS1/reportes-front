@@ -74,12 +74,6 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
         return;
       }
 
-      // Arreglos u objetos
-      // if (typeof value === "object") {
-      //   formData.append(key, JSON.stringify(value));
-      //   return;
-      // }
-
       if (key === "evidencias") {
         value.forEach((item, index) => {
           if (item.file instanceof File) {
@@ -101,6 +95,10 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
 
       formData.append(key, value);
     });
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     onSubmit(formData);
   };
