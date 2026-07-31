@@ -34,7 +34,7 @@ const ClienteDirectoSteps = [
       "lugar_entrega",
     ],
   },
-  { label: "Acuerdos", component: StepAcuerdos, fields: [] },
+  { label: "Acuerdos y Actividades", component: StepAcuerdos, fields: [] },
   { label: "Capacitación", component: StepCapacitacion, fields: [] },
   { label: "Evidencias", component: StepEvidencias, fields: [] },
 ];

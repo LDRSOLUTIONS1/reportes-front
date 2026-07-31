@@ -5,6 +5,7 @@ import RolesState from "./Context/Roles/RolesState";
 import UsuariosState from "./Context/Usuarios/UsuariosState";
 import ModulosState from "./Context/Modulos/ModulosState";
 import VisitasState from "./Context/Visitas/VisitasState";
+import AcuerdosState from "./Context/Acuerdos/AcuerdosState";
 
 const AdminApp = () => {
   return (
@@ -13,7 +14,9 @@ const AdminApp = () => {
         <UsuariosState>
           <ModulosState>
             <VisitasState>
-              <AppRouter />
+              <AcuerdosState>
+                <AppRouter />
+              </AcuerdosState>
             </VisitasState>
           </ModulosState>
         </UsuariosState>

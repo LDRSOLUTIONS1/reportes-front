@@ -25,3 +25,9 @@ export const GET_VISITAS = "GET_VISITAS";
 export const ADD_VISITAS = "ADD_VISITAS";
 export const SHOW_VISITAS = "SHOW_VISITAS";
 export const EDIT_VISITAS = "EDIT_VISITAS";
+
+//Acuerdos
+export const GET_ACUERDOS = "GET_ACUERDOS";
+export const ADD_ACUERDOS = "ADD_ACUERDOS";
+export const SHOW_ACUERDOS = "SHOW_ACUERDOS";
+export const EDIT_ACUERDOS = "EDIT_ACUERDOS";
