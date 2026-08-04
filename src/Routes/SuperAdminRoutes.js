@@ -10,6 +10,8 @@ import Visitas from "../Moduls/Visitas/Visitas";
 import AddVisitas from "../Moduls/Visitas/AddVisitas";
 import EditVisitas from "../Moduls/Visitas/EditVisitas";
 import Acuerdos from "../Moduls/Acuerdos/Acuerdos";
+import Logs from "../Moduls/Logs/Logs";
+import DetalleVisitas from "../Moduls/Visitas/DetalleVisitas";
 
 const SuperAdminRoutes = () => {
   return (
@@ -18,10 +20,12 @@ const SuperAdminRoutes = () => {
       <Route path="/Visitas" element={<Visitas />} />
       <Route path="/NuevaVisita" element={<AddVisitas />} />
       <Route path="/EditarVisita/:id" element={<EditVisitas />} />
+      <Route path="/DetalleVisita/:id" element={<DetalleVisitas />} />
       <Route path="/Acuerdos" element={<Acuerdos />} />
       <Route path="/Usuarios" element={<Usuarios />} />
       <Route path="/Roles" element={<Roles />} />
       <Route path="/Modulos" element={<Modulos />} />
+      <Route path="/Logs" element={<Logs />} />
 
       <Route path="/no-resultados" element={<NoResultados />} />
       <Route path="*" element={<NoResultados />} />

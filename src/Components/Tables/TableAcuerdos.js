@@ -7,6 +7,7 @@ import AcuerdosContext from "../../Context/Acuerdos/AcuerdosContext";
 import { dateFormatter } from "../../Utils/dateFormatter";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
+import { StatusChip } from "../../Utils/StatusChip";
 
 export default function TableAcuerdos({ rows = [] }) {
   const { acuerdo, GetAcuerdo } = useContext(AcuerdosContext);
@@ -52,6 +53,68 @@ export default function TableAcuerdos({ rows = [] }) {
       minWidth: 100,
     },
     {
+      field: "cliente_distribuidor",
+      headerName: "Cliente / Distribuidor",
+      flex: 1.5,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 220,
+      sortable: false,
+      filterable: false,
+      valueGetter: (value, row) => {
+        const vr = row.visit_report;
+        if (!vr) return "";
+        if (vr.visit_type === "cliente_directo") {
+          return `Cliente Directo - ${vr.client_visit?.razon_social ?? ""}`;
+        }
+        if (vr.visit_type === "distribuidor") {
+          return `${vr.distributor_visit?.distribuidor ?? ""} - ${vr.distributor_visit?.grupo ?? ""} - ${vr.distributor_visit?.plaza ?? ""}`;
+        }
+        return "";
+      },
+      renderCell: (params) => {
+        const vr = params.row.visit_report;
+        if (!vr) return "-";
+
+        if (vr.visit_type === "cliente_directo") {
+          return (
+            <Box sx={{ lineHeight: 1.3 }}>
+              <Typography variant="body2" fontWeight={600}>
+                Cliente Directo
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {vr.client_visit?.razon_social}
+              </Typography>
+            </Box>
+          );
+        }
+
+        if (vr.visit_type === "distribuidor") {
+          return (
+            <Box sx={{ lineHeight: 1.3 }}>
+              <Typography variant="body2" fontWeight={600}>
+                {vr.distributor_visit?.distribuidor}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {vr.distributor_visit?.grupo} · {vr.distributor_visit?.plaza}
+              </Typography>
+            </Box>
+          );
+        }
+
+        return "-";
+      },
+    },
+    {
+      field: "regional",
+      headerName: "Regional",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 120,
+      valueGetter: (value, row) => row.visit_report?.user?.name ?? "",
+    },
+    {
       field: "acuerdo",
       headerName: "Acuerdo",
       flex: 1,
@@ -68,6 +131,29 @@ export default function TableAcuerdos({ rows = [] }) {
       minWidth: 100,
     },
     {
+      field: "seguimiento",
+      headerName: "Seguimiento",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+      type: "singleSelect",
+      valueOptions: [
+        { value: 0, label: "Vencido" },
+        { value: 1, label: "Pendiente" },
+        { value: 2, label: "Completado" },
+      ],
+      renderCell: (params) => <StatusChip estado={params.value} />,
+    },
+    {
       field: "fecha_compromiso",
       headerName: "Fecha de compromiso",
       flex: 1,
@@ -75,29 +161,6 @@ export default function TableAcuerdos({ rows = [] }) {
       headerAlign: "center",
       minWidth: 100,
       renderCell: (params) => dateFormatter(params.value),
-    },
-    {
-      field: "created_at",
-      headerName: "Creado en",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-      renderCell: (params) => dateFormatter(params.value),
-    },
-    {
-      field: "estado",
-      headerName: "Estatus",
-      flex: 0.5,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-      type: "singleSelect",
-      valueOptions: [
-        { value: 1, label: "Inactivo" },
-        { value: 2, label: "Activo" },
-      ],
-      renderCell: (params) => <EstadoChip estado={params.value} />,
     },
   ];
 

@@ -122,6 +122,7 @@ export default function EditVisitas() {
               id: agreement.id,
               acuerdo: agreement.acuerdo,
               responsable: agreement.responsable,
+              seguimiento: agreement.seguimiento,
               fecha_compromiso: agreement.fecha_compromiso
                 ? agreement.fecha_compromiso.substring(0, 10)
                 : "",

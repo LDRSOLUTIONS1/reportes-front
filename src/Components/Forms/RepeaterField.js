@@ -18,15 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SelectField from "./Select";
 
-/**
- * columns: [
- *   { name: "nombre", label: "Nombre", type: "text", rules: {...} },
- *   { name: "puesto", label: "Puesto", type: "text" },
- *   { name: "tipo", label: "Tipo", type: "select", options: [...], optionValue: "id" },
- *   { name: "fecha", label: "Fecha", type: "date" },
- *   { name: "cantidad", label: "Cantidad", type: "number" },
- * ]
- */
 export default function RepeaterField({
   name,
   columns = [],

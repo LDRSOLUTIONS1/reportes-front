@@ -3,11 +3,12 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 const estadoConfig = {
-  1: { label: "Inactivo", color: "error" },
-  2: { label: "Activo", color: "success" },
+  0: { label: "Vencido", color: "error" },
+  1: { label: "Pendiente", color: "warning" },
+  2: { label: "Completado", color: "success" },
 };
 
-export const EstadoChip = ({ estado }) => {
+export const StatusChip = ({ estado }) => {
   const config = estadoConfig[estado] || {
     label: "Desconocido",
     color: "default",

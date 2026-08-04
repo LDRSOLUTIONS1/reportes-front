@@ -21,6 +21,12 @@ const StepAcuerdos = () => (
         rules: { required: "Requerido" },
       },
       {
+        name: "seguimiento",
+        label: "Seguimiento",
+        type: "text",
+        rules: { required: "Requerido" },
+      },
+      {
         name: "fecha_compromiso",
         label: "Fecha de compromiso",
         type: "date",

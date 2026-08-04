@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import ModalDetalleVisitas from "../Modals/ModalDetalleVisitas";
-import VisitasContext from "../../Context/Visitas/VisitasContext";
 import EditIcon from "@mui/icons-material/Edit";
 import { dateFormatter } from "../../Utils/dateFormatter";
 import AddIcon from "@mui/icons-material/Add";
@@ -13,20 +11,9 @@ import { esES } from "@mui/x-data-grid/locales";
 import { useNavigate } from "react-router-dom";
 
 export default function TableVisitas({ rows = [] }) {
-  const { visita, GetVisita } = useContext(VisitasContext);
   const theme = useTheme();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const [openModal, setOpenModal] = useState(false);
-
-  const handleClickOpen = async (id) => {
-    await GetVisita(id);
-    setOpenModal(true);
-  };
-  const handleClose = () => {
-    setOpenModal(false);
-  };
 
   const visit_type = [
     { id: "cliente_directo", nombre: "Cliente directo" },
@@ -64,7 +51,7 @@ export default function TableVisitas({ rows = [] }) {
           <GridActionsCellItem
             icon={<VisibilityIcon sx={{ color: "#42A5F5" }} />}
             label="Ver detalles"
-            onClick={() => handleClickOpen(params.id)}
+            onClick={() => navigate(`/DetalleVisita/${params.id}`)}
           />,
           <GridActionsCellItem
             icon={<EditIcon sx={{ color: "#ed6c02" }} />}
@@ -273,11 +260,6 @@ export default function TableVisitas({ rows = [] }) {
           />
         </Box>
       </Paper>
-      <ModalDetalleVisitas
-        open={openModal}
-        handleClose={handleClose}
-        visita={visita}
-      />
     </>
   );
 }

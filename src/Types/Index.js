@@ -31,3 +31,7 @@ export const GET_ACUERDOS = "GET_ACUERDOS";
 export const ADD_ACUERDOS = "ADD_ACUERDOS";
 export const SHOW_ACUERDOS = "SHOW_ACUERDOS";
 export const EDIT_ACUERDOS = "EDIT_ACUERDOS";
+
+//Logs
+export const GET_LOGS = "GET_LOGS";
+export const SHOW_LOGS = "SHOW_LOGS";

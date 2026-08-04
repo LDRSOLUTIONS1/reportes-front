@@ -12,6 +12,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SecurityIcon from "@mui/icons-material/Security";
 import TourIcon from "@mui/icons-material/Tour";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import HistoryIcon from "@mui/icons-material/History";
 
 const theme = createTheme({
   cssVariables: {
@@ -56,6 +57,12 @@ const MODULOS = [
     segment: "Modulos",
     title: "Modulos",
     icon: <DescriptionIcon />,
+  },
+  {
+    id: 7,
+    segment: "Logs",
+    title: "Logs",
+    icon: <HistoryIcon />,
   },
 ];
 
