@@ -126,6 +126,8 @@ export default function EditVisitas() {
               fecha_compromiso: agreement.fecha_compromiso
                 ? agreement.fecha_compromiso.substring(0, 10)
                 : "",
+              status: agreement.status,
+              completado_at: agreement.completado_at,
             })) ?? [],
 
           ...training_data,

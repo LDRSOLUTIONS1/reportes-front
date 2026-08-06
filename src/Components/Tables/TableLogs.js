@@ -22,7 +22,7 @@ export default function TableLogs({ rows = [] }) {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 150,
+      minWidth: 100,
       valueGetter: (value, row) => row.user?.name ?? "N/A",
     },
     {
@@ -31,7 +31,7 @@ export default function TableLogs({ rows = [] }) {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 160,
+      minWidth: 100,
       renderCell: (params) => dateFormatter(params.value),
     },
     {
@@ -40,7 +40,7 @@ export default function TableLogs({ rows = [] }) {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 160,
+      minWidth: 100,
       renderCell: (params) =>
         params.value ? (
           dateFormatter(params.value)
@@ -56,18 +56,18 @@ export default function TableLogs({ rows = [] }) {
     {
       field: "ip_address",
       headerName: "IP",
-      flex: 0.7,
+      flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 130,
+      minWidth: 100,
     },
     {
       field: "user_agent",
       headerName: "Navegador",
-      flex: 1.5,
+      flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 200,
+      minWidth: 100,
     },
   ];
 

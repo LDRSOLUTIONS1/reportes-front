@@ -100,6 +100,21 @@ const VisitasState = ({ children }) => {
       .catch(handleError);
   };
 
+  const CompleteAgreement = async (id) => {
+    try {
+      const res = await MethodPost(`/followup-agreements/${id}/complete`);
+      Swal.fire({
+        title: "Éxito",
+        text: "Acuerdo completado correctamente",
+        icon: "success",
+      });
+      return res.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  };
+
   return (
     <VisitasContext.Provider
       value={{
@@ -111,6 +126,7 @@ const VisitasState = ({ children }) => {
         GetVisita,
         CreateVisitas,
         EditVisitas,
+        CompleteAgreement,
       }}
     >
       {children}

@@ -32,14 +32,25 @@ export default function RepeaterField({
     formState: { errors },
   } = useFormContext();
 
-  const { fields, append, remove } = useFieldArray({ control, name });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name,
+    keyName: "_fieldId",
+  });
 
   const defaultRow = columns.reduce((acc, col) => {
     acc[col.name] = "";
     return acc;
   }, {});
 
-  const handleAdd = () => append(defaultRow);
+  const handleAdd = () => {
+    append(
+      columns.reduce((acc, col) => {
+        acc[col.name] = "";
+        return acc;
+      }, {}),
+    );
+  };
 
   const canRemove = fields.length > minRows;
   const canAdd = !maxRows || fields.length < maxRows;
@@ -75,7 +86,7 @@ export default function RepeaterField({
             )}
 
             {fields.map((field, index) => (
-              <TableRow key={field.id}>
+              <TableRow key={field._fieldId}>
                 {columns.map((col) => {
                   const fieldName = `${name}.${index}.${col.name}`;
                   const fieldError = rowErrors?.[index]?.[col.name];
