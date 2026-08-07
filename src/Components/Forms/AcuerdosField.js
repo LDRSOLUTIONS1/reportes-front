@@ -20,7 +20,8 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import SelectField from "./Select";
 
 export default function AcuerdosField({
@@ -37,7 +38,7 @@ export default function AcuerdosField({
     formState: { errors },
   } = useFormContext();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name,
     keyName: "_fieldId",
@@ -155,6 +156,7 @@ export default function AcuerdosField({
                                   ? "number"
                                   : "text"
                             }
+                            disabled={col.lockWhenSaved && !!field.id}
                             InputLabelProps={
                               col.type === "date" ? { shrink: true } : undefined
                             }
@@ -176,8 +178,20 @@ export default function AcuerdosField({
                       size="small"
                       icon={<CheckCircleIcon />}
                     />
+                  ) : field.status === 0 ? (
+                    <Chip
+                      label="Vencido"
+                      color="error"
+                      size="small"
+                      icon={<ErrorOutlineIcon />}
+                    />
                   ) : (
-                    <Chip label="Pendiente" color="warning" size="small" />
+                    <Chip
+                      label="Pendiente"
+                      color="warning"
+                      size="small"
+                      icon={<PriorityHighIcon />}
+                    />
                   )}
                 </TableCell>
 
@@ -195,7 +209,7 @@ export default function AcuerdosField({
                         size="small"
                         color="success"
                         disabled={!field.id}
-                        onClick={() => onComplete?.(index)}
+                        onClick={() => onComplete?.(index, update)}
                         title={
                           field.id
                             ? "Marcar como completado"

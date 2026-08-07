@@ -9,7 +9,7 @@ const StepAcuerdos = () => {
 
   const { getValues, setValue } = useFormContext();
 
-  const handleComplete = async (index) => {
+  const handleComplete = async (index, updateRow) => {
     const agreement = getValues(`followup_agreements.${index}`);
 
     // Los acuerdos nuevos todavía no tienen ID en la BD
@@ -19,25 +19,15 @@ const StepAcuerdos = () => {
 
     try {
       const response = await CompleteAgreement(agreement.id);
-
       const completedAgreement = response.data;
 
-      // Actualizamos el estado en React Hook Form
-      setValue(
-        `followup_agreements.${index}.status`,
-        completedAgreement.status,
-        {
-          shouldDirty: false,
-        },
-      );
-
-      setValue(
-        `followup_agreements.${index}.completado_at`,
-        completedAgreement.completado_at,
-        {
-          shouldDirty: false,
-        },
-      );
+      // update() sincroniza el array `fields` de useFieldArray,
+      // por eso el re-render es inmediato (a diferencia de setValue)
+      updateRow(index, {
+        ...agreement,
+        status: completedAgreement.status,
+        completado_at: completedAgreement.completado_at,
+      });
     } catch (error) {
       console.error("Error al completar el acuerdo:", error);
     }
@@ -49,7 +39,7 @@ const StepAcuerdos = () => {
       addLabel="Agregar acuerdo"
       minRows={0}
       maxRows={25}
-      onComplete={ handleComplete}
+      onComplete={handleComplete}
       columns={[
         {
           name: "acuerdo",
@@ -79,6 +69,7 @@ const StepAcuerdos = () => {
           name: "fecha_compromiso",
           label: "Fecha de compromiso",
           type: "date",
+          lockWhenSaved: true,
           rules: {
             required: "Requerido",
           },
