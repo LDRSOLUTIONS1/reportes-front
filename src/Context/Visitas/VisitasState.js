@@ -101,13 +101,34 @@ const VisitasState = ({ children }) => {
   };
 
   const CompleteAgreement = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas marcar este acuerdo como completado?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "green",
+      cancelButtonColor: "red",
+      confirmButtonText: "Sí, completar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      return null;
+    }
+
     try {
       const res = await MethodPost(`/followup-agreements/${id}/complete`);
-      Swal.fire({
-        title: "Éxito",
-        text: "Acuerdo completado correctamente",
+
+      await Swal.fire({
+        title: "¡Completado!",
+        text: "El acuerdo se marcó como completado correctamente.",
         icon: "success",
+        confirmButtonText: "Aceptar",
       });
+
+      GetVisitas();
+
       return res.data;
     } catch (error) {
       handleError(error);
