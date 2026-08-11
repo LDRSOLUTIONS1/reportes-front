@@ -162,6 +162,20 @@ export default function TableAcuerdos({ rows = [] }) {
       minWidth: 100,
       renderCell: (params) => dateFormatter(params.value),
     },
+    {
+      field: "completado_at",
+      headerName: "Fecha de completado",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 150,
+      renderCell: (params) => {
+        if (params.row.status !== 2 || !params.value) {
+          return "-";
+        }
+        return dateFormatter(params.value);
+      },
+    },
   ];
 
   return (

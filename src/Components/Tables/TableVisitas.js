@@ -71,13 +71,40 @@ export default function TableVisitas({ rows = [] }) {
       minWidth: 100,
     },
     {
-      field: "visit_type",
-      headerName: "¿La visita comercial es para?",
+      field: "destinatario",
+      headerName: "Cliente / Distribuidor",
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 100,
-      valueGetter: (_, row) => visitTypeMap[row.visit_type] ?? row.visit_type,
+      minWidth: 180,
+      valueGetter: (_, row) => {
+        if (row.visit_type === "cliente_directo") {
+          return row.client_visit?.razon_social ?? "Sin cliente";
+        }
+
+        if (row.visit_type === "distribuidor") {
+          return row.distributor_visit?.distribuidor ?? "Sin distribuidor";
+        }
+
+        return "Sin información";
+      },
+    },
+    {
+      field: "user",
+      headerName: "Regional",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 180,
+
+      valueGetter: (_, row) => {
+        const name = row.user?.name;
+        const email = row.user?.email;
+
+        if (!name && !email) return "Sin regional";
+
+        return `${name ?? "Sin nombre"} - ${email ?? "Sin email"}`;
+      },
     },
     {
       field: "tipo_visita",
@@ -139,20 +166,6 @@ export default function TableVisitas({ rows = [] }) {
       headerAlign: "center",
       minWidth: 100,
       renderCell: (params) => dateFormatter(params.value),
-    },
-    {
-      field: "estado",
-      headerName: "Estatus",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-      type: "singleSelect",
-      valueOptions: [
-        { value: 1, label: "Inactivo" },
-        { value: 2, label: "Activo" },
-      ],
-      renderCell: (params) => <EstadoChip estado={params.value} />,
     },
   ];
 

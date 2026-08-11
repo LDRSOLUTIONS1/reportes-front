@@ -17,6 +17,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SelectField from "./Select";
+import Swal from "sweetalert2";
 
 export default function RepeaterField({
   name,
@@ -56,6 +57,33 @@ export default function RepeaterField({
   const canAdd = !maxRows || fields.length < maxRows;
 
   const rowErrors = errors?.[name];
+
+  const handleRemove = async (index) => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas eliminar este apartado?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    remove(index);
+
+    await Swal.fire({
+      title: "¡Eliminado!",
+      text: "El apartado se eliminó correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
+    });
+  };
 
   return (
     <Box>
@@ -169,7 +197,8 @@ export default function RepeaterField({
                     size="small"
                     color="error"
                     disabled={!canRemove}
-                    onClick={() => remove(index)}
+                    onClick={() => handleRemove(index)}
+                    title="Eliminar"
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>

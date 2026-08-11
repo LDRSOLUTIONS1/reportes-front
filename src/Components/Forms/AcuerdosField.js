@@ -23,6 +23,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import SelectField from "./Select";
+import Swal from "sweetalert2";
 
 export default function AcuerdosField({
   name,
@@ -57,6 +58,33 @@ export default function AcuerdosField({
   const canAdd = !maxRows || fields.length < maxRows;
 
   const rowErrors = errors?.[name];
+
+  const handleRemove = async (index) => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas eliminar este acuerdo?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    remove(index);
+
+    await Swal.fire({
+      title: "¡Eliminado!",
+      text: "El acuerdo se eliminó correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
+    });
+  };
 
   return (
     <Box>
@@ -219,13 +247,13 @@ export default function AcuerdosField({
                         <CheckCircleIcon fontSize="small" />
                       </IconButton>
                     )}
-
+                    
                     {/* ELIMINAR */}
                     <IconButton
                       size="small"
                       color="error"
                       disabled={!canRemove}
-                      onClick={() => remove(index)}
+                      onClick={() => handleRemove(index)}
                       title="Eliminar"
                     >
                       <DeleteIcon fontSize="small" />

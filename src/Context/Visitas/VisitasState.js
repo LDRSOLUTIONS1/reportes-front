@@ -75,7 +75,7 @@ const VisitasState = ({ children }) => {
           title: "Éxito",
           text: "Visita creada correctamente",
           icon: "success",
-        });
+        }).then(() => window.location.href = '/visitas');
         GetVisitas();
       })
       .catch(handleError);
@@ -94,7 +94,7 @@ const VisitasState = ({ children }) => {
           title: "Éxito",
           text: "Visita actualizada correctamente",
           icon: "success",
-        });
+        }).then(() => window.location.href = '/visitas');
         GetVisitas();
       })
       .catch(handleError);
