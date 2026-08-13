@@ -1,8 +1,15 @@
 import clienteAxios from "./Axios";
+import publicAxios from "./PublicAxios";
 
 export default async function MethodGet(url, data) {
   return await clienteAxios.get(url, {
-    params: data, 
+    params: data,
+  });
+}
+
+export async function MethodGetPublic(url, data) {
+  return await publicAxios.get(url, {
+    params: data,
   });
 }
 

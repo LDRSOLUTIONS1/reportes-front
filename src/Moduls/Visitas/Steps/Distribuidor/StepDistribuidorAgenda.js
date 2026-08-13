@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import RepeaterField from "../../../../Components/Forms/RepeaterField";
-import MethodGet from "../../../../Config/Service";
+import { MethodGetPublic } from "../../../../Config/Service";
 
 const TEMAS = [
   { id: "back_order", nombre: "Back Order" },
@@ -45,7 +45,9 @@ const StepDistribuidorAgenda = () => {
   const [distribuidores, setDistribuidores] = useState([]);
 
   useEffect(() => {
-    MethodGet("https://apiclientes.ldrhumanresources.com/api/distribuidores")
+    MethodGetPublic(
+      "https://apiclientes.ldrhumanresources.com/api/distribuidores",
+    )
       .then((res) => setDistribuidores(res.data))
       .catch(console.log);
   }, []);
