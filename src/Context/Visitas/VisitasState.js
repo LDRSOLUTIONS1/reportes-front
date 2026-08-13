@@ -75,7 +75,7 @@ const VisitasState = ({ children }) => {
           title: "Éxito",
           text: "Visita creada correctamente",
           icon: "success",
-        }).then(() => window.location.href = '/visitas');
+        }).then(() => (window.location.href = "/visitas"));
         GetVisitas();
       })
       .catch(handleError);
@@ -94,7 +94,7 @@ const VisitasState = ({ children }) => {
           title: "Éxito",
           text: "Visita actualizada correctamente",
           icon: "success",
-        }).then(() => window.location.href = '/visitas');
+        }).then(() => (window.location.href = "/visitas"));
         GetVisitas();
       })
       .catch(handleError);
@@ -136,6 +136,28 @@ const VisitasState = ({ children }) => {
     }
   };
 
+  const CancelAgreement = async (id, motivo) => {
+    try {
+      const res = await MethodPost(`/followup-agreements/${id}/cancel`, {
+        motivo_cancelacion: motivo,
+      });
+
+      await Swal.fire({
+        title: "¡Cancelado!",
+        text: "El acuerdo se canceló correctamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+
+      GetVisitas();
+
+      return res.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  };
+
   return (
     <VisitasContext.Provider
       value={{
@@ -148,6 +170,7 @@ const VisitasState = ({ children }) => {
         CreateVisitas,
         EditVisitas,
         CompleteAgreement,
+        CancelAgreement,
       }}
     >
       {children}

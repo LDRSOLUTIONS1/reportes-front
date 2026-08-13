@@ -150,8 +150,17 @@ export default function TableAcuerdos({ rows = [] }) {
         { value: 0, label: "Vencido" },
         { value: 1, label: "Pendiente" },
         { value: 2, label: "Completado" },
+        { value: 3, label: "Cancelado" },
       ],
       renderCell: (params) => <StatusChip estado={params.value} />,
+    },
+    {
+      field: "motivo_cancelacion",
+      headerName: "Motivo de cancelación",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
     },
     {
       field: "fecha_compromiso",

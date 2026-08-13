@@ -6,6 +6,7 @@ const estadoConfig = {
   0: { label: "Vencido", color: "error" },
   1: { label: "Pendiente", color: "warning" },
   2: { label: "Completado", color: "success" },
+  3: { label: "Cancelado", color: "default" },
 };
 
 export const StatusChip = ({ estado }) => {

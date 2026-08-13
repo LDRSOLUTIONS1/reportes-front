@@ -22,8 +22,10 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import CancelIcon from "@mui/icons-material/Cancel";
 import SelectField from "./Select";
 import Swal from "sweetalert2";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function AcuerdosField({
   name,
@@ -33,6 +35,7 @@ export default function AcuerdosField({
   minRows = 0,
   maxRows,
   onComplete,
+  onCancel,
 }) {
   const {
     control,
@@ -86,6 +89,32 @@ export default function AcuerdosField({
     });
   };
 
+  const handleCancel = async (index) => {
+    const { value: motivo } = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas cancelar este acuerdo?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, cancelar",
+      cancelButtonText: "No, regresar",
+      reverseButtons: true,
+      input: "text",
+      inputLabel: "Motivo de cancelación",
+      inputPlaceholder: "Escribe el motivo...",
+      inputValidator: (value) => {
+        if (!value?.trim()) {
+          return "El motivo es requerido";
+        }
+      },
+    });
+
+    if (!motivo) return;
+
+    onCancel?.(index, update, motivo);
+  };
+
   return (
     <Box>
       <TableContainer component={Paper} variant="outlined">
@@ -118,32 +147,56 @@ export default function AcuerdosField({
             )}
 
             {fields.map((field, index) => (
-              <TableRow key={field._fieldId}>
-                {columns.map((col) => {
-                  const fieldName = `${name}.${index}.${col.name}`;
-                  const fieldError = rowErrors?.[index]?.[col.name];
+              <React.Fragment key={field._fieldId}>
+                <TableRow>
+                  {columns.map((col) => {
+                    const fieldName = `${name}.${index}.${col.name}`;
+                    const fieldError = rowErrors?.[index]?.[col.name];
 
-                  if (col.type === "select") {
-                    return (
-                      <TableCell key={col.name} sx={{ minWidth: 160 }}>
-                        <SelectField
-                          name={fieldName}
-                          label=""
-                          control={control}
-                          rules={col.rules}
-                          errors={{}}
-                          options={col.options || []}
-                          optionValue={col.optionValue || "id"}
-                          getOptionLabel={col.getOptionLabel}
-                          defaultOption={col.defaultOption}
-                        />
-                      </TableCell>
-                    );
-                  }
+                    if (col.type === "select") {
+                      return (
+                        <TableCell key={col.name} sx={{ minWidth: 160 }}>
+                          <SelectField
+                            name={fieldName}
+                            label=""
+                            control={control}
+                            rules={col.rules}
+                            errors={{}}
+                            options={col.options || []}
+                            optionValue={col.optionValue || "id"}
+                            getOptionLabel={col.getOptionLabel}
+                            defaultOption={col.defaultOption}
+                          />
+                        </TableCell>
+                      );
+                    }
 
-                  if (col.type === "textarea") {
+                    if (col.type === "textarea") {
+                      return (
+                        <TableCell key={col.name} sx={{ minWidth: 260 }}>
+                          <Controller
+                            name={fieldName}
+                            control={control}
+                            defaultValue=""
+                            rules={col.rules}
+                            render={({ field: controllerField }) => (
+                              <TextField
+                                {...controllerField}
+                                fullWidth
+                                multiline
+                                minRows={2}
+                                size="small"
+                                error={!!fieldError}
+                                helperText={fieldError?.message}
+                              />
+                            )}
+                          />
+                        </TableCell>
+                      );
+                    }
+
                     return (
-                      <TableCell key={col.name} sx={{ minWidth: 260 }}>
+                      <TableCell key={col.name} sx={{ minWidth: 140 }}>
                         <Controller
                           name={fieldName}
                           control={control}
@@ -153,9 +206,20 @@ export default function AcuerdosField({
                             <TextField
                               {...controllerField}
                               fullWidth
-                              multiline
-                              minRows={2}
                               size="small"
+                              type={
+                                col.type === "date"
+                                  ? "date"
+                                  : col.type === "number"
+                                    ? "number"
+                                    : "text"
+                              }
+                              disabled={col.lockWhenSaved && !!field.id}
+                              InputLabelProps={
+                                col.type === "date"
+                                  ? { shrink: true }
+                                  : undefined
+                              }
                               error={!!fieldError}
                               helperText={fieldError?.message}
                             />
@@ -163,104 +227,118 @@ export default function AcuerdosField({
                         />
                       </TableCell>
                     );
-                  }
+                  })}
 
-                  return (
-                    <TableCell key={col.name} sx={{ minWidth: 140 }}>
-                      <Controller
-                        name={fieldName}
-                        control={control}
-                        defaultValue=""
-                        rules={col.rules}
-                        render={({ field: controllerField }) => (
-                          <TextField
-                            {...controllerField}
-                            fullWidth
-                            size="small"
-                            type={
-                              col.type === "date"
-                                ? "date"
-                                : col.type === "number"
-                                  ? "number"
-                                  : "text"
-                            }
-                            disabled={col.lockWhenSaved && !!field.id}
-                            InputLabelProps={
-                              col.type === "date" ? { shrink: true } : undefined
-                            }
-                            error={!!fieldError}
-                            helperText={fieldError?.message}
-                          />
-                        )}
+                  {/* ESTADO */}
+                  <TableCell>
+                    {field.status === 2 ? (
+                      <Chip
+                        label="Completado"
+                        color="success"
+                        size="small"
+                        icon={<CheckCircleIcon />}
                       />
-                    </TableCell>
-                  );
-                })}
+                    ) : field.status === 3 ? (
+                      <Tooltip
+                        title={
+                          field.motivo_cancelacion || "Sin motivo especificado"
+                        }
+                        arrow
+                      >
+                        <Chip
+                          label="Cancelado"
+                          color="default"
+                          size="small"
+                          icon={<CancelIcon />}
+                        />
+                      </Tooltip>
+                    ) : field.esta_vencido === true ? (
+                      <Chip
+                        label="Vencido"
+                        color="error"
+                        size="small"
+                        icon={<ErrorOutlineIcon />}
+                      />
+                    ) : (
+                      <Chip
+                        label="Pendiente"
+                        color="warning"
+                        size="small"
+                        icon={<PriorityHighIcon />}
+                      />
+                    )}
+                  </TableCell>
 
-                {/* ESTADO */}
-                <TableCell>
-                  {field.status === 2 ? (
-                    <Chip
-                      label="Completado"
-                      color="success"
-                      size="small"
-                      icon={<CheckCircleIcon />}
-                    />
-                  ) : field.status === 0 ? (
-                    <Chip
-                      label="Vencido"
-                      color="error"
-                      size="small"
-                      icon={<ErrorOutlineIcon />}
-                    />
-                  ) : (
-                    <Chip
-                      label="Pendiente"
-                      color="warning"
-                      size="small"
-                      icon={<PriorityHighIcon />}
-                    />
-                  )}
-                </TableCell>
+                  {/* ACCIONES */}
+                  <TableCell>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={0.5}
+                    >
+                      {/* COMPLETAR */}
+                      {field.status !== 2 && field.status !== 3 && (
+                        <IconButton
+                          size="small"
+                          color="success"
+                          disabled={!field.id}
+                          onClick={() => onComplete?.(index, update)}
+                          title={
+                            field.id
+                              ? "Marcar como completado"
+                              : "Guarda primero el acuerdo"
+                          }
+                        >
+                          <CheckCircleIcon fontSize="small" />
+                        </IconButton>
+                      )}
 
-                {/* ACCIONES */}
-                <TableCell>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={0.5}
-                  >
-                    {/* COMPLETAR */}
-                    {field.status !== 2 && (
+                      {/* CANCELAR */}
+                      {field.status !== 2 && field.status !== 3 && (
+                        <IconButton
+                          size="small"
+                          color="warning"
+                          disabled={!field.id}
+                          onClick={() => handleCancel(index)}
+                          title={
+                            field.id
+                              ? "Cancelar acuerdo"
+                              : "Guarda primero el acuerdo"
+                          }
+                        >
+                          <CancelIcon fontSize="small" />
+                        </IconButton>
+                      )}
+
+                      {/* ELIMINAR */}
                       <IconButton
                         size="small"
-                        color="success"
-                        disabled={!field.id}
-                        onClick={() => onComplete?.(index, update)}
-                        title={
-                          field.id
-                            ? "Marcar como completado"
-                            : "Guarda primero el acuerdo"
-                        }
+                        color="error"
+                        disabled={!canRemove}
+                        onClick={() => handleRemove(index)}
+                        title="Eliminar"
                       >
-                        <CheckCircleIcon fontSize="small" />
+                        <DeleteIcon fontSize="small" />
                       </IconButton>
-                    )}
-                    
-                    {/* ELIMINAR */}
-                    <IconButton
-                      size="small"
-                      color="error"
-                      disabled={!canRemove}
-                      onClick={() => handleRemove(index)}
-                      title="Eliminar"
+                    </Box>
+                  </TableCell>
+                </TableRow>
+
+                {field.status === 3 && field.motivo_cancelacion && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length + 2}
+                      sx={{ py: 1, backgroundColor: "action.hover" }}
                     >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                </TableCell>
-              </TableRow>
+                      <Typography variant="caption" color="text.secondary">
+                        <strong>Motivo de cancelación:</strong>{" "}
+                        {field.motivo_cancelacion}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>

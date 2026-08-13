@@ -5,7 +5,7 @@ import AcuerdosField from "../../../../Components/Forms/AcuerdosField";
 import VisitasContext from "../../../../Context/Visitas/VisitasContext";
 
 const StepAcuerdos = () => {
-  const { CompleteAgreement } = useContext(VisitasContext);
+  const { CompleteAgreement, CancelAgreement } = useContext(VisitasContext);
 
   const { getValues, setValue } = useFormContext();
 
@@ -19,6 +19,7 @@ const StepAcuerdos = () => {
 
     try {
       const response = await CompleteAgreement(agreement.id);
+      if (!response) return; 
       const completedAgreement = response.data;
 
       // update() sincroniza el array `fields` de useFieldArray,
@@ -33,6 +34,24 @@ const StepAcuerdos = () => {
     }
   };
 
+  const handleCancel = async (index, updateRow, motivo) => {
+    const agreement = getValues(`followup_agreements.${index}`);
+    if (!agreement?.id) return;
+
+    try {
+      const response = await CancelAgreement(agreement.id, motivo);
+      const cancelledAgreement = response.data;
+
+      updateRow(index, {
+        ...agreement,
+        status: cancelledAgreement.status,
+        motivo_cancelacion: cancelledAgreement.motivo_cancelacion,
+      });
+    } catch (error) {
+      console.error("Error al cancelar el acuerdo:", error);
+    }
+  };
+
   return (
     <AcuerdosField
       name="followup_agreements"
@@ -40,6 +59,7 @@ const StepAcuerdos = () => {
       minRows={0}
       maxRows={25}
       onComplete={handleComplete}
+      onCancel={handleCancel}
       columns={[
         {
           name: "acuerdo",

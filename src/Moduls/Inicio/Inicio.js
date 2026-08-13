@@ -4,7 +4,7 @@ import Layout from '../../Components/Layout/Layout';
 const Inicio = () => {
   return (
     <Layout>
-      Inicio
+      
     </Layout>
   )
 }
