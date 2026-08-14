@@ -7,6 +7,7 @@ import {
   Button,
   Paper,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 
@@ -31,6 +32,7 @@ const stepInformacionGeneral = {
 const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
   const methods = useForm({ defaultValues, mode: "onChange" });
   const [activeStep, setActiveStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const visitType = methods.watch("visit_type");
 
@@ -46,7 +48,6 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
     if (defaultValues) methods.reset(defaultValues);
   }, [defaultValues, methods]);
 
-  // si cambia visit_type y el paso activo ya no existe en la nueva rama, regresa al inicio
   useEffect(() => {
     if (activeStep > steps.length - 1) setActiveStep(0);
   }, [steps, activeStep]);
@@ -60,7 +61,9 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
 
   const backStep = () => setActiveStep((prev) => prev - 1);
 
-  const guardar = (data) => {
+  const guardar = async (data) => {
+    if (isSubmitting) return;
+
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
@@ -68,7 +71,6 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
         return;
       }
 
-      // Archivos
       if (value instanceof File) {
         formData.append(key, value);
         return;
@@ -96,11 +98,16 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
       formData.append(key, value);
     });
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
+    setIsSubmitting(true);
+    try {
+      await onSubmit(formData);
+    } catch (error) {
+      console.error(error);
+      // El error se maneja aquí solo para asegurar que el loading se apague.
+      // El manejo de UI del error (toast/alert) puede seguir viviendo en el context.
+    } finally {
+      setIsSubmitting(false);
     }
-
-    onSubmit(formData);
   };
 
   const StepComponent = steps[activeStep]?.component;
@@ -129,21 +136,34 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
         <Box display="flex" justifyContent="space-between">
           <Button
             variant="outlined"
-            disabled={activeStep === 0}
+            disabled={activeStep === 0 || isSubmitting}
             onClick={backStep}
           >
             Atrás
           </Button>
 
           {activeStep === steps.length - 1 ? (
-            <Button variant="contained" onClick={methods.handleSubmit(guardar)}>
-              {mode === "edit" ? "Actualizar" : "Guardar"}
+            <Button
+              variant="contained"
+              onClick={methods.handleSubmit(guardar)}
+              disabled={isSubmitting}
+              startIcon={
+                isSubmitting ? (
+                  <CircularProgress size={18} color="inherit" />
+                ) : null
+              }
+            >
+              {isSubmitting
+                ? "Guardando..."
+                : mode === "edit"
+                  ? "Actualizar"
+                  : "Guardar"}
             </Button>
           ) : (
             <Button
               variant="contained"
               onClick={nextStep}
-              disabled={activeStep === 0 && !visitType}
+              disabled={(activeStep === 0 && !visitType) || isSubmitting}
             >
               Siguiente
             </Button>

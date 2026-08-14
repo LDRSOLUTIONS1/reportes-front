@@ -9,8 +9,8 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
-import { MethodGetPublic } from "../../../../Config/Service";
 import SelectField from "../../../../Components/Forms/Select";
+import publicAxios from "../../../../Config/AxiosPublic";
 
 const StepRequerimientos = () => {
   const {
@@ -23,9 +23,7 @@ const StepRequerimientos = () => {
   const [distribuidores, setDistribuidores] = useState([]);
 
   useEffect(() => {
-    MethodGetPublic(
-      "https://apiclientes.ldrhumanresources.com/api/distribuidores",
-    )
+    publicAxios("https://apiclientes.ldrhumanresources.com/api/distribuidores")
       .then((res) => setDistribuidores(res.data))
       .catch(console.log);
   }, []);

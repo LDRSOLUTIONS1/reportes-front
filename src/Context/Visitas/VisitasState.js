@@ -67,37 +67,51 @@ const VisitasState = ({ children }) => {
       .catch(handleError);
   };
 
-  const CreateVisitas = (data) => {
-    MethodPost("/visitas", data, imageHeaders)
-      .then((res) => {
-        dispatch({ type: ADD_VISITAS, payload: res.data });
-        Swal.fire({
-          title: "Éxito",
-          text: "Visita creada correctamente",
-          icon: "success",
-        }).then(() => (window.location.href = "/visitas"));
-        GetVisitas();
-      })
-      .catch(handleError);
+  const CreateVisitas = async (data) => {
+    try {
+      const res = await MethodPost("/visitas", data, imageHeaders);
+
+      dispatch({ type: ADD_VISITAS, payload: res.data });
+
+      await Swal.fire({
+        title: "Éxito",
+        text: "Visita creada correctamente",
+        icon: "success",
+      }).then(() => (window.location.href = "/visitas"));
+
+      GetVisitas();
+
+      return res.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
   };
 
-  const EditVisitas = (id, data) => {
+  const EditVisitas = async (id, data) => {
     const request =
       data instanceof FormData
         ? MethodPost(`/editVisit/${id}?_method=PUT`, data, imageHeaders)
         : MethodPut(`/editVisit/${id}`, data);
 
-    request
-      .then((res) => {
-        dispatch({ type: EDIT_VISITAS, payload: res.data });
-        Swal.fire({
-          title: "Éxito",
-          text: "Visita actualizada correctamente",
-          icon: "success",
-        }).then(() => (window.location.href = "/visitas"));
-        GetVisitas();
-      })
-      .catch(handleError);
+    try {
+      const res = await request;
+
+      dispatch({ type: EDIT_VISITAS, payload: res.data });
+
+      await Swal.fire({
+        title: "Éxito",
+        text: "Visita actualizada correctamente",
+        icon: "success",
+      }).then(() => (window.location.href = "/visitas"));
+
+      GetVisitas();
+
+      return res.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
   };
 
   const CompleteAgreement = async (id) => {
