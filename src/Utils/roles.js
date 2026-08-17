@@ -2,7 +2,6 @@ export const ROLES = {
   1: "Super Administrador",
   2: "Administrador",
   3: "Consultor",
-  4: "Gerente de Marca",
 };
 
 // Obtener nombre del rol
@@ -22,4 +21,5 @@ export const tienePermisoMenu = (role_id, permiso) => {
 const PERMISOS_POR_ROL_MENU = {
   1: [1, 2, 3, 4, 5, 6, 7], // SUPER_ADMIN ve todo
   2: [1, 2, 3], // ADMINISTRADOR
+  3: [1, 2, 3], // CONSULTOR
 };

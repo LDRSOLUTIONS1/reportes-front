@@ -73,7 +73,7 @@ const UsuariosState = ({ children }) => {
         dispatch({ type: ADD_USUARIOS, payload: res.data });
         Swal.fire({
           title: "Éxito",
-          text: "Rol creado correctamente",
+          text: "Usuario creado correctamente",
           icon: "success",
         });
         GetUsuarios();
@@ -87,7 +87,7 @@ const UsuariosState = ({ children }) => {
         dispatch({ type: EDIT_USUARIOS, payload: res.data });
         Swal.fire({
           title: "Éxito",
-          text: "Rol actualizado correctamente",
+          text: "Usuario actualizado correctamente",
           icon: "success",
         });
         GetUsuarios();

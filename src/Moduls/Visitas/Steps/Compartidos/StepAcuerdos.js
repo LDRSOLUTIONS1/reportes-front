@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import AcuerdosField from "../../../../Components/Forms/AcuerdosField";
 import VisitasContext from "../../../../Context/Visitas/VisitasContext";
 
-const StepAcuerdos = () => {
+const StepAcuerdos = ({ mode }) => {
   const { CompleteAgreement, CancelAgreement } = useContext(VisitasContext);
 
   const { getValues, setValue } = useFormContext();
@@ -19,7 +19,7 @@ const StepAcuerdos = () => {
 
     try {
       const response = await CompleteAgreement(agreement.id);
-      if (!response) return; 
+      if (!response) return;
       const completedAgreement = response.data;
 
       // update() sincroniza el array `fields` de useFieldArray,
@@ -55,6 +55,7 @@ const StepAcuerdos = () => {
   return (
     <AcuerdosField
       name="followup_agreements"
+      mode={mode}
       addLabel="Agregar acuerdo"
       minRows={0}
       maxRows={25}

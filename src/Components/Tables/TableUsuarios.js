@@ -88,8 +88,8 @@ export default function TableUsuarios({ rows = [] }) {
       minWidth: 100,
     },
     {
-      field: "external_rh_id",
-      headerName: "Id rh externo",
+      field: "collaborator_number",
+      headerName: "Número de colaborador",
       flex: 1,
       align: "center",
       headerAlign: "center",

@@ -27,8 +27,8 @@ export default function TableAcuerdos({ rows = [] }) {
   const columns = [
     {
       field: "actions",
-      headerName: "Acciones",
-      flex: 0.5,
+      headerName: "Detalle",
+      flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 50,
@@ -45,17 +45,9 @@ export default function TableAcuerdos({ rows = [] }) {
       },
     },
     {
-      field: "id",
-      headerName: "Id",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-    },
-    {
       field: "cliente_distribuidor",
       headerName: "Cliente / Distribuidor",
-      flex: 1.5,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 220,
@@ -198,7 +190,7 @@ export default function TableAcuerdos({ rows = [] }) {
         }}
       >
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-          Lista de acuerdos y actividades
+          Todos los acuerdos y actividades
         </Typography>
 
         <Box

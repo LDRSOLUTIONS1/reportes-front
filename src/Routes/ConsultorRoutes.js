@@ -3,17 +3,13 @@ import { Routes, Route } from "react-router-dom";
 
 import NoResultados from "../Components/Layout/NoResultados";
 import Inicio from "../Moduls/Inicio/Inicio";
-import Usuarios from "../Moduls/Usuarios/Usuarios";
-import Roles from "../Moduls/Roles/Roles";
-import Modulos from "../Moduls/Modulos/Modulos";
 import Visitas from "../Moduls/Visitas/Visitas";
 import AddVisitas from "../Moduls/Visitas/AddVisitas";
 import EditVisitas from "../Moduls/Visitas/EditVisitas";
 import Acuerdos from "../Moduls/Acuerdos/Acuerdos";
-import Logs from "../Moduls/Logs/Logs";
 import DetalleVisitas from "../Moduls/Visitas/DetalleVisitas";
 
-const SuperAdminRoutes = () => {
+const ConsultorRoutes = () => {
   return (
     <Routes>
       <Route path="/Inicio" element={<Inicio />} />
@@ -22,11 +18,6 @@ const SuperAdminRoutes = () => {
       <Route path="/EditarVisita/:id" element={<EditVisitas />} />
       <Route path="/DetalleVisita/:id" element={<DetalleVisitas />} />
       <Route path="/Acuerdos" element={<Acuerdos />} />
-      
-      <Route path="/Usuarios" element={<Usuarios />} />
-      <Route path="/Roles" element={<Roles />} />
-      <Route path="/Modulos" element={<Modulos />} />
-      <Route path="/Logs" element={<Logs />} />
 
       <Route path="/no-resultados" element={<NoResultados />} />
       <Route path="*" element={<NoResultados />} />
@@ -34,4 +25,4 @@ const SuperAdminRoutes = () => {
   );
 };
 
-export default SuperAdminRoutes;
+export default ConsultorRoutes;

@@ -125,7 +125,7 @@ const VisitaStepper = ({ onSubmit, defaultValues, mode = "create" }) => {
 
         <Box mb={4}>
           {StepComponent ? (
-            <StepComponent />
+            <StepComponent  mode={mode}/>
           ) : (
             <Typography color="text.secondary">
               Selecciona el tipo de visita para continuar.

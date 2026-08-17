@@ -103,7 +103,7 @@ const ModalDetalleUsuarios = ({ open, handleClose, usuario }) => {
             <TableBody>
               {[
                 { label: "Id", value: usuario.id },
-                { label: "Id rh sistema", value: usuario.external_rh_id },
+                { label: "Id rh sistema", value: usuario.collaborator_number },
                 { label: "Nombre", value: usuario.name },
                 { label: "Correo", value: usuario.email },
                 { label: "Rol", value: usuario.role?.name ?? "N/A" },

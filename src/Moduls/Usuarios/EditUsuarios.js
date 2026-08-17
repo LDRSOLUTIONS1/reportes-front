@@ -14,7 +14,8 @@ import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 export default function EditUsuarios({ open, handleClose, id, roles }) {
   const { EditUsuarios } = useContext(UsuariosContext);
 
-  const [role, setRole] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -24,7 +25,10 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
     reset,
   } = useForm({
     defaultValues: {
+      external_rh_id: "",
       name: "",
+      email: "",
+      role_id: "",
       estado: "",
     },
   });
@@ -34,35 +38,43 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
 
     MethodGet(`/usuarios/${id}`)
       .then((res) => {
-        setRole(res.data);
+        setUserData(res.data);
       })
       .catch(console.log);
   }, [id]);
 
   useEffect(() => {
-    if (role) {
+    if (userData) {
       reset({
-        external_rh_id: role.external_rh_id || "",
-        name: role.name || "",
-        email: role.email || "",
-        role_id: role.role_id || "",
-        estado: role.estado || "",
+        collaborator_number: userData.collaborator_number || "",
+        name: userData.name || "",
+        email: userData.email || "",
+        role_id: userData.role_id || "",
+        estado: userData.estado || "",
       });
     }
-  }, [role, reset]);
+  }, [userData, reset]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const payload = {
       ...data,
       id,
     };
 
-    EditUsuarios(payload);
-    handleClose();
+    try {
+      setLoading(true);
+      await EditUsuarios(payload);
+      handleDialogClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDialogClose = () => {
     reset();
+    setUserData(null);
     handleClose();
   };
 
@@ -89,15 +101,15 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
             <Grid size={12}>
               <TextField
                 fullWidth
-                label="Id rh sistema"
+                label="Número de colaborador"
                 InputLabelProps={{ shrink: true }}
-                {...register("external_rh_id", {
+                {...register("collaborator_number", {
                   required: "Este campo es obligatorio",
                   minLength: { value: 1, message: "Mínimo 1 carácter" },
                   maxLength: { value: 100, message: "Máximo 100 caracteres" },
                 })}
-                error={!!errors.external_rh_id}
-                helperText={errors.external_rh_id?.message}
+                error={!!errors.collaborator_number}
+                helperText={errors.collaborator_number?.message}
               />
             </Grid>
             <Grid size={12}>
@@ -130,26 +142,32 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
                 helperText={errors.email?.message}
               />
             </Grid>
+
             <Grid size={12}>
-              <TextField
-                select
-                fullWidth
-                label="Selecciona un rol"
-                {...register("rol_id", {
-                  required: "Debes seleccionar un rol",
-                })}
-                error={!!errors.rol_id}
-                helperText={errors.rol_id?.message}
-              >
-                <MenuItem value="">
-                  <em>-- Selecciona un rol --</em>
-                </MenuItem>
-                {roles.map((role) => (
-                  <MenuItem key={role.id} value={role.id}>
-                    {role.name}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <Controller
+                name="role_id"
+                control={control}
+                rules={{ required: "Debes seleccionar un rol" }}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    fullWidth
+                    label="Selecciona un rol"
+                    {...field}
+                    error={!!errors.role_id}
+                    helperText={errors.role_id?.message}
+                  >
+                    <MenuItem value="">
+                      <em>-- Selecciona un rol --</em>
+                    </MenuItem>
+                    {roles.map((r) => (
+                      <MenuItem key={r.id} value={r.id}>
+                        {r.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
             </Grid>
 
             <Grid size={12}>
@@ -187,6 +205,7 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
         <DialogActions>
           <Button
             onClick={handleDialogClose}
+            disabled={loading}
             sx={{
               backgroundColor: "red",
               color: "white",
@@ -200,6 +219,7 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
 
           <Button
             type="submit"
+            disabled={loading}
             sx={{
               backgroundColor: "#1565c0",
               color: "white",
@@ -208,7 +228,7 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
               },
             }}
           >
-            Actualizar
+            {loading ? "Actualizando..." : "Actualizar"}
           </Button>
         </DialogActions>
       </form>

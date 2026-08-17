@@ -41,14 +41,14 @@ export default function AddUsuarios({ open, handleClose, roles }) {
             <Grid size={12}>
               <TextField
                 fullWidth
-                label="Id rh sistema"
-                {...register("external_rh_id", {
+                label="Número de colaborador"
+                {...register("collaborator_number", {
                   required: "Este campo es obligatorio",
                   minLength: { value: 1, message: "Mínimo 1 carácter" },
                   maxLength: { value: 100, message: "Máximo 100 caracteres" },
                 })}
-                error={!!errors.external_rh_id}
-                helperText={errors.external_rh_id?.message}
+                error={!!errors.collaborator_number}
+                helperText={errors.collaborator_number?.message}
               />
             </Grid>
             <Grid size={12}>
@@ -82,11 +82,11 @@ export default function AddUsuarios({ open, handleClose, roles }) {
                 select
                 fullWidth
                 label="Selecciona un rol"
-                {...register("rol_id", {
+                {...register("role_id", {
                   required: "Debes seleccionar un rol",
                 })}
-                error={!!errors.rol_id}
-                helperText={errors.rol_id?.message}
+                error={!!errors.role_id}
+                helperText={errors.role_id?.message}
               >
                 <MenuItem value="">
                   <em>-- Selecciona un rol --</em>

@@ -34,6 +34,7 @@ export default function AcuerdosField({
   emptyMessage = "Sin registros aún",
   minRows = 0,
   maxRows,
+  mode = "create",
   onComplete,
   onCancel,
 }) {
@@ -57,7 +58,7 @@ export default function AcuerdosField({
     append(newRow);
   };
 
-  const canRemove = fields.length > minRows;
+  const canRemove = mode !== "edit" && fields.length > minRows;
   const canAdd = !maxRows || fields.length < maxRows;
 
   const rowErrors = errors?.[name];
@@ -121,13 +122,13 @@ export default function AcuerdosField({
         <Table size="small">
           <TableHead>
             <TableRow>
+              <TableCell width={100}>Acciones</TableCell>
+
               {columns.map((col) => (
                 <TableCell key={col.name}>{col.label}</TableCell>
               ))}
 
               <TableCell width={130}>Estado</TableCell>
-
-              <TableCell width={100}>Acciones</TableCell>
             </TableRow>
           </TableHead>
 
@@ -149,6 +150,63 @@ export default function AcuerdosField({
             {fields.map((field, index) => (
               <React.Fragment key={field._fieldId}>
                 <TableRow>
+                  {/* ACCIONES */}
+                  <TableCell>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={0.5}
+                    >
+                      {/* COMPLETAR */}
+                      {field.status !== 2 && field.status !== 3 && (
+                        <IconButton
+                          size="small"
+                          color="success"
+                          disabled={!field.id}
+                          onClick={() => onComplete?.(index, update)}
+                          title={
+                            field.id
+                              ? "Marcar como completado"
+                              : "Guarda primero el acuerdo"
+                          }
+                        >
+                          <CheckCircleIcon fontSize="small" />
+                        </IconButton>
+                      )}
+
+                      {/* CANCELAR */}
+                      {field.status !== 2 && field.status !== 3 && (
+                        <IconButton
+                          size="small"
+                          color="warning"
+                          disabled={!field.id}
+                          onClick={() => handleCancel(index)}
+                          title={
+                            field.id
+                              ? "Cancelar acuerdo"
+                              : "Guarda primero el acuerdo"
+                          }
+                        >
+                          <CancelIcon fontSize="small" />
+                        </IconButton>
+                      )}
+
+                      {/* ELIMINAR */}
+                      {mode !== "edit" && (
+                        <IconButton
+                          size="small"
+                          color="error"
+                          disabled={!canRemove}
+                          onClick={() => handleRemove(index)}
+                          title="Eliminar"
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      )}
+                    </Box>
+                  </TableCell>
+
                   {columns.map((col) => {
                     const fieldName = `${name}.${index}.${col.name}`;
                     const fieldError = rowErrors?.[index]?.[col.name];
@@ -267,61 +325,6 @@ export default function AcuerdosField({
                         icon={<PriorityHighIcon />}
                       />
                     )}
-                  </TableCell>
-
-                  {/* ACCIONES */}
-                  <TableCell>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      gap={0.5}
-                    >
-                      {/* COMPLETAR */}
-                      {field.status !== 2 && field.status !== 3 && (
-                        <IconButton
-                          size="small"
-                          color="success"
-                          disabled={!field.id}
-                          onClick={() => onComplete?.(index, update)}
-                          title={
-                            field.id
-                              ? "Marcar como completado"
-                              : "Guarda primero el acuerdo"
-                          }
-                        >
-                          <CheckCircleIcon fontSize="small" />
-                        </IconButton>
-                      )}
-
-                      {/* CANCELAR */}
-                      {field.status !== 2 && field.status !== 3 && (
-                        <IconButton
-                          size="small"
-                          color="warning"
-                          disabled={!field.id}
-                          onClick={() => handleCancel(index)}
-                          title={
-                            field.id
-                              ? "Cancelar acuerdo"
-                              : "Guarda primero el acuerdo"
-                          }
-                        >
-                          <CancelIcon fontSize="small" />
-                        </IconButton>
-                      )}
-
-                      {/* ELIMINAR */}
-                      <IconButton
-                        size="small"
-                        color="error"
-                        disabled={!canRemove}
-                        onClick={() => handleRemove(index)}
-                        title="Eliminar"
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
                   </TableCell>
                 </TableRow>
 
