@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
@@ -12,9 +12,11 @@ import { Button } from "@mui/material";
 import AddUsuarios from "../../Moduls/Usuarios/AddUsuarios";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
+import RolesContext from "../../Context/Roles/RolesContext";
 
 export default function TableUsuarios({ rows = [] }) {
   const { usuario, GetUsuario } = useContext(UsuariosContext);
+  const { roles, GetRoles } = useContext(RolesContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -48,11 +50,15 @@ export default function TableUsuarios({ rows = [] }) {
     setOpenModalAdd(false);
   };
 
+  useEffect(() => {
+    GetRoles();
+  }, []);
+
   const columns = [
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,  
+      flex: 0.5,
       align: "center",
       headerAlign: "center",
       minWidth: 50,
@@ -80,6 +86,39 @@ export default function TableUsuarios({ rows = [] }) {
       align: "center",
       headerAlign: "center",
       minWidth: 100,
+    },
+    {
+      field: "external_rh_id",
+      headerName: "Id rh externo",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "name",
+      headerName: "Nombre completo",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "email",
+      headerName: "Correo electrónico",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+    },
+    {
+      field: "rol",
+      headerName: "Rol",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
+      valueGetter: (value, row) => row.role?.name ?? "N/A",
     },
     {
       field: "created_at",
@@ -221,10 +260,15 @@ export default function TableUsuarios({ rows = [] }) {
           open={modalUpdate}
           handleClose={handleClickCloseEdit}
           id={id_usuario}
+          roles={roles}
         />
       )}
 
-      <AddUsuarios open={modalAdd} handleClose={handleClickCloseAdd} />
+      <AddUsuarios
+        open={modalAdd}
+        handleClose={handleClickCloseAdd}
+        roles={roles}
+      />
     </>
   );
 }

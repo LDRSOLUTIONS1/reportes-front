@@ -6,11 +6,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useForm } from "react-hook-form";
-import { Grid } from "@mui/material";
+import { Grid, MenuItem } from "@mui/material";
 import { useContext } from "react";
 import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 
-export default function AddUsuarios({ open, handleClose }) {
+export default function AddUsuarios({ open, handleClose, roles }) {
   const { CreateUsuarios } = useContext(UsuariosContext);
 
   const {
@@ -41,6 +41,19 @@ export default function AddUsuarios({ open, handleClose }) {
             <Grid size={12}>
               <TextField
                 fullWidth
+                label="Id rh sistema"
+                {...register("external_rh_id", {
+                  required: "Este campo es obligatorio",
+                  minLength: { value: 1, message: "Mínimo 1 carácter" },
+                  maxLength: { value: 100, message: "Máximo 100 caracteres" },
+                })}
+                error={!!errors.external_rh_id}
+                helperText={errors.external_rh_id?.message}
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                fullWidth
                 label="Nombre del usuario"
                 {...register("name", {
                   required: "Este campo es obligatorio",
@@ -50,6 +63,40 @@ export default function AddUsuarios({ open, handleClose }) {
                 error={!!errors.name}
                 helperText={errors.name?.message}
               />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                fullWidth
+                label="Correo electrónico"
+                {...register("email", {
+                  required: "Este campo es obligatorio",
+                  minLength: { value: 1, message: "Mínimo 1 carácter" },
+                  maxLength: { value: 100, message: "Máximo 100 caracteres" },
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                select
+                fullWidth
+                label="Selecciona un rol"
+                {...register("rol_id", {
+                  required: "Debes seleccionar un rol",
+                })}
+                error={!!errors.rol_id}
+                helperText={errors.rol_id?.message}
+              >
+                <MenuItem value="">
+                  <em>-- Selecciona un rol --</em>
+                </MenuItem>
+                {roles.map((role) => (
+                  <MenuItem key={role.id} value={role.id}>
+                    {role.name}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
         </DialogContent>

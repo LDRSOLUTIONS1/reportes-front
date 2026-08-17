@@ -11,7 +11,7 @@ import { Grid, MenuItem } from "@mui/material";
 import MethodGet from "../../Config/Service";
 import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 
-export default function EditUsuarios({ open, handleClose, id }) {
+export default function EditUsuarios({ open, handleClose, id, roles }) {
   const { EditUsuarios } = useContext(UsuariosContext);
 
   const [role, setRole] = useState(null);
@@ -42,7 +42,10 @@ export default function EditUsuarios({ open, handleClose, id }) {
   useEffect(() => {
     if (role) {
       reset({
+        external_rh_id: role.external_rh_id || "",
         name: role.name || "",
+        email: role.email || "",
+        role_id: role.role_id || "",
         estado: role.estado || "",
       });
     }
@@ -86,6 +89,20 @@ export default function EditUsuarios({ open, handleClose, id }) {
             <Grid size={12}>
               <TextField
                 fullWidth
+                label="Id rh sistema"
+                InputLabelProps={{ shrink: true }}
+                {...register("external_rh_id", {
+                  required: "Este campo es obligatorio",
+                  minLength: { value: 1, message: "Mínimo 1 carácter" },
+                  maxLength: { value: 100, message: "Máximo 100 caracteres" },
+                })}
+                error={!!errors.external_rh_id}
+                helperText={errors.external_rh_id?.message}
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                fullWidth
                 label="Nombre del usuario"
                 InputLabelProps={{ shrink: true }}
                 {...register("name", {
@@ -98,6 +115,41 @@ export default function EditUsuarios({ open, handleClose, id }) {
                 error={!!errors.name}
                 helperText={errors.name?.message}
               />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                fullWidth
+                label="Correo electrónico"
+                InputLabelProps={{ shrink: true }}
+                {...register("email", {
+                  required: "Este campo es obligatorio",
+                  minLength: { value: 1, message: "Mínimo 1 carácter" },
+                  maxLength: { value: 100, message: "Máximo 100 caracteres" },
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                select
+                fullWidth
+                label="Selecciona un rol"
+                {...register("rol_id", {
+                  required: "Debes seleccionar un rol",
+                })}
+                error={!!errors.rol_id}
+                helperText={errors.rol_id?.message}
+              >
+                <MenuItem value="">
+                  <em>-- Selecciona un rol --</em>
+                </MenuItem>
+                {roles.map((role) => (
+                  <MenuItem key={role.id} value={role.id}>
+                    {role.name}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
 
             <Grid size={12}>
