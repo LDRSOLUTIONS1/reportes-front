@@ -14,6 +14,7 @@ export default function TableVisitas({ rows = [] }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const role_id = localStorage.getItem("role_id");
 
   const visit_type = [
     { id: "cliente_directo", nombre: "Cliente directo" },
@@ -53,12 +54,16 @@ export default function TableVisitas({ rows = [] }) {
             label="Ver detalles"
             onClick={() => navigate(`/DetalleVisita/${params.id}`)}
           />,
-          <GridActionsCellItem
-            icon={<EditIcon sx={{ color: "#ed6c02" }} />}
-            label="Editar"
-            onClick={() => navigate(`/EditarVisita/${params.id}`)}
-          />,
         ];
+        if (role_id !== "3") {
+          actions.push(
+            <GridActionsCellItem
+              icon={<EditIcon sx={{ color: "#ed6c02" }} />}
+              label="Editar"
+              onClick={() => navigate(`/EditarVisita/${params.id}`)}
+            />,
+          );
+        }
         return actions;
       },
     },
@@ -216,14 +221,16 @@ export default function TableVisitas({ rows = [] }) {
                   }}
                 >
                   <Typography fontWeight={600}>Total: {rows.length}</Typography>
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => navigate("/NuevaVisita")}
-                    sx={{ borderRadius: 3 }}
-                  >
-                    Nueva visita
-                  </Button>
+                  {role_id !== "3" && (
+                    <Button
+                      variant="contained"
+                      startIcon={<AddIcon />}
+                      onClick={() => navigate("/NuevaVisita")}
+                      sx={{ borderRadius: 3 }}
+                    >
+                      Nueva visita
+                    </Button>
+                  )}
                 </Box>
               ),
             }}

@@ -34,6 +34,11 @@ import SchoolIcon from "@mui/icons-material/School";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import CancelIcon from "@mui/icons-material/Cancel";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 
 const DetalleVisitas = () => {
   const theme = useTheme();
@@ -62,6 +67,111 @@ const DetalleVisitas = () => {
       GetVisita(id);
     }
   }, [id]);
+
+  const tipo_visita = [
+    { id: "presentacion_comercial", nombre: "Presentación comercial" },
+    { id: "capacitacion_operativa", nombre: "Capacitación operativa" },
+    { id: "capacitacion_producto", nombre: "Capacitación producto" },
+    { id: "acompanamiento_comercial", nombre: "Acompañamiento comercial" },
+    { id: "operativa", nombre: "Operativa" },
+    { id: "capacitacion", nombre: "Capacitación" },
+    { id: "otro", nombre: "Otro" },
+  ];
+
+  const getTipoVisitaNombre = (tipo) => {
+    return tipo_visita.find((item) => item.id === tipo)?.nombre || tipo || "-";
+  };
+
+  const EVENTOS = [
+    { id: "china", nombre: "China" },
+    { id: "torneo_golf", nombre: "Torneo Golf" },
+    { id: "f1", nombre: "F1" },
+    { id: "expo_transporte", nombre: "Expo Transporte" },
+    { id: "super_copa", nombre: "Super Copa" },
+    { id: "cuernos_chuecos", nombre: "Cuernos Chuecos" },
+  ];
+
+  const getNombreEvento = (evento) => {
+    return EVENTOS.find((item) => item.id === evento)?.nombre || evento || "-";
+  };
+
+  const financiamientos = [
+    { id: "credito_casa", nombre: "Crédito Casa" },
+    { id: "arrendamiento", nombre: "Arrendamiento" },
+    { id: "contado", nombre: "Contado" },
+    { id: "otro", nombre: "Otro" },
+  ];
+
+  const getFinanciamiento = (financiamiento) => {
+    return (
+      financiamientos.find((item) => item.id === financiamiento)?.nombre ||
+      financiamiento ||
+      "-"
+    );
+  };
+
+  const tipos = [
+    { id: "tecnica", nombre: "Tecnica" },
+    { id: "comercial", nombre: "Comercial" },
+    { id: "operativa", nombre: "Operativa" },
+  ];
+
+  const getTipo = (tipo) => {
+    return tipos.find((item) => item.id === tipo)?.nombre || tipo || "-";
+  };
+
+  const TEMAS = [
+    { id: "back_order", nombre: "Back Order" },
+    { id: "bonos", nombre: "Bonos" },
+    { id: "estado_cuenta", nombre: "Estado de cuenta" },
+    { id: "estrategia_marketing", nombre: "Estrategía Marketing" },
+    { id: "facturacion", nombre: "Facturación" },
+    { id: "fuerza_ventas", nombre: "Fuerza de ventas" },
+    { id: "inventario_facturado", nombre: "Inventario Facturado" },
+    { id: "inventario_fisico", nombre: "Inventario Fisico" },
+    { id: "notas_credito", nombre: "Notas de crédito" },
+    { id: "pedidos_nuevos", nombre: "Pedidos nuevos" },
+    { id: "plan_comercial", nombre: "Plan Comercial" },
+    { id: "plan_piso", nombre: "Plan Piso" },
+    { id: "posventa", nombre: "Posventa" },
+    { id: "programacion_citas", nombre: "Programación de citas" },
+    { id: "prospeccion_leads", nombre: "Prospección/ Leads" },
+    { id: "retail", nombre: "Retail" },
+  ];
+
+  // Si ya tienes getEstadoEfectivo en un util compartido, usa ese en su lugar.
+  const getEstadoChip = (acuerdo) => {
+    if (acuerdo.status === 2) {
+      return {
+        label: "Completado",
+        color: "success",
+        icon: <CheckCircleIcon sx={{ fontSize: 16 }} />,
+      };
+    }
+    if (acuerdo.status === 3) {
+      return {
+        label: "Cancelado",
+        color: "default",
+        icon: <CancelIcon sx={{ fontSize: 16 }} />,
+      };
+    }
+    if (acuerdo.esta_vencido) {
+      return {
+        label: "Vencido",
+        color: "error",
+        icon: <ErrorOutlineIcon sx={{ fontSize: 16 }} />,
+      };
+    }
+    return {
+      label: "Pendiente",
+      color: "warning",
+      icon: <PriorityHighIcon sx={{ fontSize: 16 }} />,
+    };
+  };
+
+  const getTema = (tema) => {
+    return TEMAS.find((item) => item.id === tema)?.nombre || tema || "-";
+  };
 
   if (!visita) {
     return (
@@ -211,7 +321,10 @@ const DetalleVisitas = () => {
           accent={palette.general}
         >
           <Grid container spacing={3}>
-            <InfoItem label="Tipo de visita" value={visita.tipo_visita} />
+            <InfoItem
+              label="Tipo de visita"
+              value={getTipoVisitaNombre(visita.tipo_visita)}
+            />
             <InfoItem
               label="Fecha de inicio"
               value={formatDate(visita.fecha_inicio)}
@@ -457,7 +570,7 @@ const DetalleVisitas = () => {
                             fontWeight={700}
                             sx={{ color: palette.ink }}
                           >
-                            {evento.nombre_evento}
+                            {getNombreEvento(evento.nombre_evento)}
                           </Typography>
                           <Chip
                             size="small"
@@ -519,7 +632,9 @@ const DetalleVisitas = () => {
                   />
                   <InfoItem
                     label="Financiamiento"
-                    value={datosCliente.requirements.financiamiento}
+                    value={getFinanciamiento(
+                      datosCliente.requirements.financiamiento,
+                    )}
                   />
                   <InfoItem
                     label="Tiempo de entrega"
@@ -586,7 +701,7 @@ const DetalleVisitas = () => {
                   {datosDistribuidor.temas_revisados.map((tema, index) => (
                     <Chip
                       key={index}
-                      label={tema}
+                      label={getTema(tema)}
                       sx={{
                         bgcolor: `${palette.distribuidor}0F`,
                         color: palette.distribuidor,
@@ -786,32 +901,187 @@ const DetalleVisitas = () => {
             accent={palette.acuerdos}
           >
             <Grid container spacing={2}>
-              {visita.followup_agreements.map((acuerdo) => (
-                <Grid item xs={12} md={6} key={acuerdo.id}>
-                  <InnerCard
-                    sx={{ borderLeft: `3px solid ${palette.acuerdos}` }}
-                  >
-                    <Typography fontWeight={700} sx={{ color: palette.ink }}>
-                      {acuerdo.acuerdo}
-                    </Typography>
-                    <Divider sx={{ my: 1.25 }} />
-                    <Stack spacing={0.5}>
-                      <DataRow
-                        label="Responsable"
-                        value={acuerdo.responsable}
-                      />
-                      <DataRow
-                        label="Seguimiento"
-                        value={acuerdo.seguimiento}
-                      />
-                      <DataRow
-                        label="Fecha compromiso"
-                        value={formatDate(acuerdo.fecha_compromiso)}
-                      />
-                    </Stack>
-                  </InnerCard>
-                </Grid>
-              ))}
+              {visita.followup_agreements.map((acuerdo) => {
+                const dates = acuerdo.dates ?? [];
+                const original =
+                  dates.find((d) => d.numero_reprogramacion === 0)
+                    ?.fecha_compromiso ?? acuerdo.fecha_compromiso;
+                const vigente =
+                  dates.find((d) => d.estado === 2) ?? dates[dates.length - 1];
+                const fechaVigente =
+                  vigente?.fecha_compromiso ?? acuerdo.fecha_compromiso;
+                const estadoInfo = getEstadoChip(acuerdo);
+                const reprogramaciones =
+                  dates.length > 1 ? dates.length - 1 : 0;
+
+                return (
+                  <Grid item xs={12} key={acuerdo.id}>
+                    <InnerCard
+                      sx={{ borderLeft: `3px solid ${palette.acuerdos}` }}
+                    >
+                      <Stack
+                        direction={{ xs: "column", sm: "row" }}
+                        justifyContent="space-between"
+                        alignItems={{ xs: "flex-start", sm: "center" }}
+                        spacing={1}
+                      >
+                        <Typography
+                          fontWeight={700}
+                          sx={{ color: palette.ink }}
+                        >
+                          {acuerdo.acuerdo}
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={estadoInfo.label}
+                          color={estadoInfo.color}
+                          icon={estadoInfo.icon}
+                        />
+                      </Stack>
+
+                      <Divider sx={{ my: 1.25 }} />
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                          <DataRow
+                            label="Responsable"
+                            value={acuerdo.responsable}
+                          />
+                          <DataRow
+                            label="Seguimiento"
+                            value={acuerdo.seguimiento}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <DataRow
+                            label="Fecha compromiso original"
+                            value={formatDate(original)}
+                          />
+                          <DataRow
+                            label="Fecha vigente"
+                            value={formatDate(fechaVigente)}
+                          />
+                          {acuerdo.status === 2 && (
+                            <DataRow
+                              label="Completado el"
+                              value={formatDate(acuerdo.completado_at)}
+                            />
+                          )}
+                        </Grid>
+                      </Grid>
+
+                      {acuerdo.status === 3 && acuerdo.motivo_cancelacion && (
+                        <Box
+                          sx={{
+                            mt: 1.5,
+                            p: 1.5,
+                            borderRadius: 1.5,
+                            bgcolor: theme.palette.action.hover,
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{ color: palette.muted, fontWeight: 600 }}
+                          >
+                            Motivo de cancelación
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ color: palette.ink, mt: 0.25 }}
+                          >
+                            {acuerdo.motivo_cancelacion}
+                          </Typography>
+                        </Box>
+                      )}
+
+                      {reprogramaciones > 0 && (
+                        <Box sx={{ mt: 1.5 }}>
+                          <Stack
+                            direction="row"
+                            spacing={0.75}
+                            alignItems="center"
+                            sx={{ mb: 1 }}
+                          >
+                            <EventRepeatIcon
+                              sx={{ fontSize: 16, color: palette.muted }}
+                            />
+                            <Typography
+                              variant="caption"
+                              sx={{ color: palette.muted, fontWeight: 600 }}
+                            >
+                              Historial de reprogramaciones ({reprogramaciones})
+                            </Typography>
+                          </Stack>
+
+                          <Stack spacing={1}>
+                            {dates
+                              .slice()
+                              .sort(
+                                (a, b) =>
+                                  a.numero_reprogramacion -
+                                  b.numero_reprogramacion,
+                              )
+                              .map((d) => (
+                                <Box
+                                  key={d.id}
+                                  sx={{
+                                    pl: 1.5,
+                                    borderLeft: `2px solid ${theme.palette.divider}`,
+                                  }}
+                                >
+                                  <Stack
+                                    direction="row"
+                                    spacing={1}
+                                    alignItems="center"
+                                    flexWrap="wrap"
+                                  >
+                                    <Typography
+                                      variant="body2"
+                                      fontWeight={600}
+                                      sx={{ color: palette.ink }}
+                                    >
+                                      {d.numero_reprogramacion === 0
+                                        ? "Fecha original"
+                                        : `Reprogramación ${d.numero_reprogramacion}`}
+                                      : {formatDate(d.fecha_compromiso)}
+                                    </Typography>
+                                    {d.estado === 2 && (
+                                      <Chip
+                                        label="Vigente"
+                                        size="small"
+                                        color="success"
+                                        sx={{ height: 18, fontSize: 10 }}
+                                      />
+                                    )}
+                                  </Stack>
+                                  {d.motivo_reprogramacion && (
+                                    <Typography
+                                      variant="caption"
+                                      sx={{ color: palette.muted }}
+                                    >
+                                      Motivo: {d.motivo_reprogramacion}
+                                    </Typography>
+                                  )}
+                                  {d.user?.name && (
+                                    <Typography
+                                      variant="caption"
+                                      display="block"
+                                      sx={{
+                                        color: theme.palette.text.disabled,
+                                      }}
+                                    >
+                                      {d.user.name} · {formatDate(d.created_at)}
+                                    </Typography>
+                                  )}
+                                </Box>
+                              ))}
+                          </Stack>
+                        </Box>
+                      )}
+                    </InnerCard>
+                  </Grid>
+                );
+              })}
             </Grid>
           </SectionCard>
         )}
@@ -823,7 +1093,10 @@ const DetalleVisitas = () => {
             accent={palette.capacitacion}
           >
             <Grid container spacing={3}>
-              <InfoItem label="Tipo" value={visita.training_data.tipo} />
+              <InfoItem
+                label="Tipo"
+                value={getTipo(visita.training_data.tipo)}
+              />
               <InfoItem
                 label="Tema principal"
                 value={visita.training_data.tema_principal}

@@ -137,7 +137,7 @@ const VisitasState = ({ children }) => {
       await Swal.fire({
         title: "¡Completado!",
         text: "El acuerdo se marcó como completado correctamente.",
-        icon: "success",
+        icon: "success",  
         confirmButtonText: "Aceptar",
       });
 
@@ -172,6 +172,29 @@ const VisitasState = ({ children }) => {
     }
   };
 
+  const RescheduleAgreement = async (id, payload) => {
+    try {
+      const res = await MethodPost(
+        `/followup-agreements/${id}/reschedule`,
+        payload,
+      );
+
+      await Swal.fire({
+        title: "¡Reprogramado!",
+        text: "El acuerdo se reprogramó correctamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+
+      GetVisitas();
+
+      return res.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  };
+
   return (
     <VisitasContext.Provider
       value={{
@@ -185,6 +208,7 @@ const VisitasState = ({ children }) => {
         EditVisitas,
         CompleteAgreement,
         CancelAgreement,
+        RescheduleAgreement,
       }}
     >
       {children}

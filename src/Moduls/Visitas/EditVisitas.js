@@ -118,20 +118,35 @@ export default function EditVisitas() {
           demo: requirements?.demo ? "si" : "no",
 
           followup_agreements:
-            data.followup_agreements?.map((agreement) => ({
-              id: agreement.id,
-              acuerdo: agreement.acuerdo,
-              responsable: agreement.responsable,
-              seguimiento: agreement.seguimiento,
-              fecha_compromiso: agreement.fecha_compromiso
-                ? agreement.fecha_compromiso.substring(0, 10)
-                : "",
-              status: agreement.status,
-              motivo_cancelacion: agreement.motivo_cancelacion,
-              completado_at: agreement.completado_at,
-              estado: agreement.estado,
-              esta_vencido: agreement.esta_vencido,
-            })) ?? [],
+            data.followup_agreements?.map((agreement) => {
+              const dates = agreement.dates ?? [];
+              const original = dates.find((d) => d.numero_reprogramacion === 0);
+              const vigente =
+                dates.find((d) => d.estado === 2) ?? dates[dates.length - 1];
+
+              return {
+                id: agreement.id,
+                acuerdo: agreement.acuerdo,
+                responsable: agreement.responsable,
+                seguimiento: agreement.seguimiento,
+                fecha_compromiso: (
+                  original?.fecha_compromiso ??
+                  agreement.fecha_compromiso ??
+                  ""
+                ).substring(0, 10),
+                fecha_vigente: (
+                  vigente?.fecha_compromiso ??
+                  agreement.fecha_compromiso ??
+                  ""
+                ).substring(0, 10),
+                status: agreement.status,
+                motivo_cancelacion: agreement.motivo_cancelacion,
+                completado_at: agreement.completado_at,
+                estado: agreement.estado,
+                esta_vencido: agreement.esta_vencido,
+                dates,
+              };
+            }) ?? [],
 
           ...training_data,
 

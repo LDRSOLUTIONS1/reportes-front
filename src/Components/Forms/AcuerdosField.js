@@ -26,6 +26,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import SelectField from "./Select";
 import Swal from "sweetalert2";
 import Tooltip from "@mui/material/Tooltip";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 
 export default function AcuerdosField({
   name,
@@ -37,6 +38,7 @@ export default function AcuerdosField({
   mode = "create",
   onComplete,
   onCancel,
+  onReschedule,
 }) {
   const {
     control,
@@ -116,6 +118,41 @@ export default function AcuerdosField({
     onCancel?.(index, update, motivo);
   };
 
+  const handleReschedule = async (index) => {
+    const { value: formValues } = await Swal.fire({
+      title: "¿Reprogramar fecha compromiso?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, reprogramar",
+      cancelButtonText: "No, cancelar",
+      reverseButtons: true,
+      html:
+        '<input id="swal-fecha" type="date" class="swal2-input" placeholder="Nueva fecha compromiso">' +
+        '<textarea id="swal-motivo" class="swal2-textarea" placeholder="Motivo de la reprogramación"></textarea>',
+      focusConfirm: false,
+      preConfirm: () => {
+        const fecha_compromiso = document.getElementById("swal-fecha").value;
+        const motivo_reprogramacion =
+          document.getElementById("swal-motivo").value;
+
+        if (!fecha_compromiso) {
+          Swal.showValidationMessage("La nueva fecha es requerida");
+          return false;
+        }
+        if (!motivo_reprogramacion?.trim()) {
+          Swal.showValidationMessage("El motivo es requerido");
+          return false;
+        }
+        return { fecha_compromiso, motivo_reprogramacion };
+      },
+    });
+
+    if (!formValues) return;
+
+    onReschedule?.(index, update, formValues);
+  };
+
   return (
     <Box>
       <TableContainer component={Paper} variant="outlined">
@@ -127,6 +164,8 @@ export default function AcuerdosField({
               {columns.map((col) => (
                 <TableCell key={col.name}>{col.label}</TableCell>
               ))}
+
+              <TableCell width={130}>Fecha vigente</TableCell>
 
               <TableCell width={130}>Estado</TableCell>
             </TableRow>
@@ -172,6 +211,23 @@ export default function AcuerdosField({
                           }
                         >
                           <CheckCircleIcon fontSize="small" />
+                        </IconButton>
+                      )}
+
+                      {/* REPROGRAMAR */}
+                      {field.status !== 2 && field.status !== 3 && (
+                        <IconButton
+                          size="small"
+                          color="info"
+                          disabled={!field.id}
+                          onClick={() => handleReschedule(index)}
+                          title={
+                            field.id
+                              ? "Reprogramar fecha compromiso"
+                              : "Guarda primero el acuerdo"
+                          }
+                        >
+                          <EventRepeatIcon fontSize="small" />
                         </IconButton>
                       )}
 
@@ -286,6 +342,28 @@ export default function AcuerdosField({
                       </TableCell>
                     );
                   })}
+
+                  <TableCell>
+                    {field.fecha_vigente ? (
+                      <Typography variant="body2">
+                        {field.fecha_vigente}
+                        {field.numero_reprogramaciones > 0 && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            display="block"
+                          >
+                            Reprogramado {field.numero_reprogramaciones}{" "}
+                            {field.numero_reprogramaciones === 1
+                              ? "vez"
+                              : "veces"}
+                          </Typography>
+                        )}
+                      </Typography>
+                    ) : (
+                      "—"
+                    )}
+                  </TableCell>
 
                   {/* ESTADO */}
                   <TableCell>

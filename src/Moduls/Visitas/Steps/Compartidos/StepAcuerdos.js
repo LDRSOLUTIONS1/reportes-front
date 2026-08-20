@@ -5,7 +5,8 @@ import AcuerdosField from "../../../../Components/Forms/AcuerdosField";
 import VisitasContext from "../../../../Context/Visitas/VisitasContext";
 
 const StepAcuerdos = ({ mode }) => {
-  const { CompleteAgreement, CancelAgreement } = useContext(VisitasContext);
+  const { CompleteAgreement, CancelAgreement, RescheduleAgreement } =
+    useContext(VisitasContext);
 
   const { getValues, setValue } = useFormContext();
 
@@ -52,6 +53,45 @@ const StepAcuerdos = ({ mode }) => {
     }
   };
 
+  const handleReschedule = async (
+    index,
+    updateRow,
+    { fecha_compromiso, motivo_reprogramacion },
+  ) => {
+    const agreement = getValues(`followup_agreements.${index}`);
+
+    if (!agreement?.id) return;
+
+    try {
+      const response = await RescheduleAgreement(agreement.id, {
+        fecha_compromiso,
+        motivo_reprogramacion,
+      });
+
+      const updated = response.data;
+
+      updateRow(index, {
+        ...agreement,
+        ...updated,
+
+        // La fecha original siempre permanece
+        fecha_compromiso: agreement.fecha_compromiso,
+
+        fecha_vigente: (
+          updated.fecha_vigente ??
+          updated.fecha_compromiso ??
+          fecha_compromiso
+        ).substring(0, 10),
+
+        dates: updated.dates ?? agreement.dates,
+
+        esta_vencido: updated.esta_vencido ?? false,
+      });
+    } catch (error) {
+      console.error("Error al reprogramar el acuerdo:", error);
+    }
+  };
+
   return (
     <AcuerdosField
       name="followup_agreements"
@@ -61,6 +101,7 @@ const StepAcuerdos = ({ mode }) => {
       maxRows={25}
       onComplete={handleComplete}
       onCancel={handleCancel}
+      onReschedule={handleReschedule}
       columns={[
         {
           name: "acuerdo",
