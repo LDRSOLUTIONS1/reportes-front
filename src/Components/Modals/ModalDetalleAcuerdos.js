@@ -22,6 +22,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { dateFormatter } from "../../Utils/dateFormatter";
 import { StatusChip } from "../../Utils/StatusChip";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
+import Chip from "@mui/material/Chip";
 
 const ModalDetalleAcuerdos = ({ open, handleClose, acuerdo }) => {
   const theme = useTheme();
@@ -89,6 +91,14 @@ const ModalDetalleAcuerdos = ({ open, handleClose, acuerdo }) => {
 
     return "-";
   };
+
+  const dates = acuerdo.dates ?? [];
+  const original =
+    dates.find((d) => d.numero_reprogramacion === 0)?.fecha_compromiso ??
+    acuerdo.fecha_compromiso;
+  const vigente = dates.find((d) => d.estado === 2) ?? dates[dates.length - 1];
+  const fechaVigente = vigente?.fecha_compromiso ?? acuerdo.fecha_compromiso;
+  const reprogramaciones = dates.length > 1 ? dates.length - 1 : 0;
 
   return (
     <Dialog
@@ -258,17 +268,20 @@ const ModalDetalleAcuerdos = ({ open, handleClose, acuerdo }) => {
                         value: acuerdo.motivo_cancelacion,
                       },
                       {
-                        label: "Fecha de compromiso",
-                        value: acuerdo.fecha_compromiso
-                          ? dateFormatter(acuerdo.fecha_compromiso)
-                          : "-",
-                      },
-                      {
                         label: "Fecha de completado",
                         value:
                           acuerdo.status === 2 && acuerdo.completado_at
                             ? dateFormatter(acuerdo.completado_at)
                             : "-",
+                      },
+
+                      {
+                        label: "Fecha de compromiso original",
+                        value: dateFormatter(original),
+                      },
+                      {
+                        label: "Fecha vigente",
+                        value: dateFormatter(fechaVigente),
                       },
                     ].map((row, index) => (
                       <TableRow
@@ -298,6 +311,106 @@ const ModalDetalleAcuerdos = ({ open, handleClose, acuerdo }) => {
                 </Table>
               </TableContainer>
             </Box>
+
+            {reprogramaciones > 0 && (
+              <Box>
+                <Stack
+                  direction="row"
+                  spacing={0.75}
+                  alignItems="center"
+                  sx={{ mb: 1.5 }}
+                >
+                  <EventRepeatIcon sx={{ fontSize: 20 }} />
+                  <Typography variant="subtitle1" fontWeight={700}>
+                    Historial de reprogramaciones ({reprogramaciones})
+                  </Typography>
+                </Stack>
+
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    borderRadius: 2,
+                    boxShadow: "none",
+                    border: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
+                  <Table>
+                    <TableBody>
+                      {dates
+                        .slice()
+                        .sort(
+                          (a, b) =>
+                            a.numero_reprogramacion - b.numero_reprogramacion,
+                        )
+                        .map((d, index) => (
+                          <TableRow
+                            key={d.id}
+                            sx={{
+                              "&:nth-of-type(odd)": {
+                                backgroundColor: theme.palette.action.hover,
+                              },
+                            }}
+                          >
+                            <TableCell
+                              sx={{
+                                fontWeight: 600,
+                                width: "35%",
+                                borderRight: `1px solid ${theme.palette.divider}`,
+                              }}
+                            >
+                              {d.numero_reprogramacion === 0
+                                ? "Fecha original"
+                                : `Reprogramación ${d.numero_reprogramacion}`}
+                            </TableCell>
+
+                            <TableCell sx={{ fontWeight: 500 }}>
+                              <Stack spacing={0.5}>
+                                <Stack
+                                  direction="row"
+                                  spacing={1}
+                                  alignItems="center"
+                                  flexWrap="wrap"
+                                >
+                                  <span>
+                                    {dateFormatter(d.fecha_compromiso)}
+                                  </span>
+                                  {/* {d.estado === 2 && (
+                                    <Chip
+                                      label="Pendiente"
+                                      size="small"
+                                      color="warning"
+                                      sx={{ height: 18, fontSize: 10 }}
+                                    />
+                                  )} */}
+                                </Stack>
+
+                                {d.motivo_reprogramacion && (
+                                  <Typography
+                                    variant="caption"
+                                    sx={{ color: theme.palette.text.secondary }}
+                                  >
+                                    Motivo: {d.motivo_reprogramacion}
+                                  </Typography>
+                                )}
+
+                                {d.user?.name && (
+                                  <Typography
+                                    variant="caption"
+                                    sx={{ color: theme.palette.text.disabled }}
+                                  >
+                                    {d.user.name} ·{" "}
+                                    {dateFormatter(d.created_at)}
+                                  </Typography>
+                                )}
+                              </Stack>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            )}
           </Stack>
         )}
       </DialogContent>

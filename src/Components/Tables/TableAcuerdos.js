@@ -1,5 +1,13 @@
 import React, { useContext, useState } from "react";
-import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  useTheme,
+  useMediaQuery,
+  Tooltip,
+  Chip,
+} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import ModalDetalleAcuerdos from "../Modals/ModalDetalleAcuerdos";
@@ -8,6 +16,7 @@ import { dateFormatter } from "../../Utils/dateFormatter";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
 import { StatusChip } from "../../Utils/StatusChip";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 
 export default function TableAcuerdos({ rows = [] }) {
   const { acuerdo, GetAcuerdo } = useContext(AcuerdosContext);
@@ -144,37 +153,65 @@ export default function TableAcuerdos({ rows = [] }) {
         { value: 2, label: "Completado" },
         { value: 3, label: "Cancelado" },
       ],
-      renderCell: (params) => <StatusChip estado={params.value} />,
+      renderCell: (params) => (
+        <Tooltip
+          title={params.row.motivo_cancelacion || ""}
+          arrow
+          disableHoverListener={!params.row.motivo_cancelacion}
+        >
+          <span>
+            <StatusChip estado={params.value} />
+          </span>
+        </Tooltip>
+      ),
     },
     {
-      field: "motivo_cancelacion",
-      headerName: "Motivo de cancelación",
+      field: "fecha_vigente",
+      headerName: "Fecha vigente",
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 100,
-    },
-    {
-      field: "fecha_compromiso",
-      headerName: "Fecha de compromiso",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
+      minWidth: 130,
+      valueGetter: (value, row) => {
+        const dates = row.dates ?? [];
+        const vigente =
+          dates.find((d) => d.estado === 2) ?? dates[dates.length - 1];
+        return vigente?.fecha_compromiso ?? row.fecha_compromiso;
+      },
       renderCell: (params) => dateFormatter(params.value),
     },
     {
-      field: "completado_at",
-      headerName: "Fecha de completado",
-      flex: 1,
+      field: "reprogramaciones",
+      headerName: "Reprogramado",
+      flex: 0.7,
       align: "center",
       headerAlign: "center",
-      minWidth: 150,
+      minWidth: 110,
+      sortable: false,
+      filterable: false,
+      valueGetter: (value, row) =>
+        row.dates?.length > 1 ? row.dates.length - 1 : 0,
       renderCell: (params) => {
-        if (params.row.status !== 2 || !params.value) {
-          return "-";
-        }
-        return dateFormatter(params.value);
+        const dates = params.row.dates ?? [];
+        const count = params.value;
+
+        if (count === 0) return "-";
+
+        const original =
+          dates.find((d) => d.numero_reprogramacion === 0)?.fecha_compromiso ??
+          params.row.fecha_compromiso;
+
+        return (
+          <Tooltip title={`Original: ${dateFormatter(original)}`} arrow>
+            <Chip
+              icon={<EventRepeatIcon sx={{ fontSize: 14 }} />}
+              label={count}
+              size="small"
+              color="warning"
+              sx={{ height: 22, fontSize: 11, cursor: "help" }}
+            />
+          </Tooltip>
+        );
       },
     },
   ];

@@ -137,7 +137,7 @@ const VisitasState = ({ children }) => {
       await Swal.fire({
         title: "¡Completado!",
         text: "El acuerdo se marcó como completado correctamente.",
-        icon: "success",  
+        icon: "success",
         confirmButtonText: "Aceptar",
       });
 
@@ -195,6 +195,58 @@ const VisitasState = ({ children }) => {
     }
   };
 
+  const descargarPDF = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Descargar PDF?",
+      text: "¿Deseas descargar el reporte de esta visita en formato PDF?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, descargar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    try {
+      const res = await MethodGet(
+        `/visitas/${id}/pdf`,
+        {},
+        {
+          responseType: "blob",
+        },
+      );
+
+      const blob = new Blob([res.data], {
+        type: "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `visita-${id}.pdf`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+
+      await Swal.fire({
+        title: "¡Descargado!",
+        text: "El PDF se descargó correctamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  };
   return (
     <VisitasContext.Provider
       value={{
@@ -209,6 +261,7 @@ const VisitasState = ({ children }) => {
         CompleteAgreement,
         CancelAgreement,
         RescheduleAgreement,
+        descargarPDF,
       }}
     >
       {children}

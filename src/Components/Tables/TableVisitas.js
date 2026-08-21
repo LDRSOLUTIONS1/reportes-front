@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
@@ -9,12 +9,15 @@ import { Button } from "@mui/material";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
 import { useNavigate } from "react-router-dom";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import VisitasContext from "../../Context/Visitas/VisitasContext";
 
 export default function TableVisitas({ rows = [] }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const role_id = localStorage.getItem("role_id");
+  const { descargarPDF } = useContext(VisitasContext);
 
   const visit_type = [
     { id: "cliente_directo", nombre: "Cliente directo" },
@@ -45,7 +48,7 @@ export default function TableVisitas({ rows = [] }) {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 50,
+      minWidth: 100,
       type: "actions",
       getActions: (params) => {
         const actions = [
@@ -64,6 +67,14 @@ export default function TableVisitas({ rows = [] }) {
             />,
           );
         }
+        actions.push(
+          <GridActionsCellItem
+            icon={<PictureAsPdfIcon sx={{ color: "#d32f2f" }} />}
+            label="Descargar PDF"
+            onClick={() => descargarPDF(params.id)}
+          />,
+        );
+
         return actions;
       },
     },
