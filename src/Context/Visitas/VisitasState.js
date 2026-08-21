@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import VisitasContext from "./VisitasContext";
 import VisitasReducer from "./VisitasReducer";
-import MethodGet, { MethodPost, MethodPut } from "../../Config/Service";
+import MethodGet, { MethodGetPDF, MethodPost, MethodPut } from "../../Config/Service";
 import Swal from "sweetalert2";
 import {
   GET_VISITAS,
@@ -213,7 +213,7 @@ const VisitasState = ({ children }) => {
     }
 
     try {
-      const res = await MethodGet(
+      const res = await MethodGetPDF(
         `/visitas/${id}/pdf`,
         {},
         {

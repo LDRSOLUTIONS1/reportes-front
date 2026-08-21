@@ -1,6 +1,12 @@
 import clienteAxios from "./Axios";
 
-export default async function MethodGet(url, data = {}, config = {}) {
+export default async function MethodGet(url, data) {
+  return await clienteAxios.get(url, {
+    params: data,
+  });
+}
+
+export async function MethodGetPDF(url, data = {}, config = {}) {
   return await clienteAxios.get(url, {
     params: data,
     ...config,
