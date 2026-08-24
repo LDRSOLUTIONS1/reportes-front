@@ -759,7 +759,7 @@ const DetalleVisitas = () => {
 
             {datosDistribuidor.leads?.length > 0 && (
               <SectionCard
-                title="Leads"
+                title="Datos de Acompañamiento"
                 icon={<PersonIcon sx={{ fontSize: 20 }} />}
                 accent={palette.distribuidor}
               >
@@ -833,53 +833,6 @@ const DetalleVisitas = () => {
               </SectionCard>
             )}
 
-            {datosDistribuidor.commercial_indicators?.length > 0 && (
-              <SectionCard
-                title="Indicadores comerciales"
-                icon={<AssignmentIcon sx={{ fontSize: 20 }} />}
-                accent={palette.distribuidor}
-              >
-                <Grid container spacing={2}>
-                  {datosDistribuidor.commercial_indicators.map((indicador) => (
-                    <Grid item xs={12} md={6} lg={4} key={indicador.id}>
-                      <InnerCard>
-                        <Typography
-                          fontWeight={700}
-                          sx={{ color: palette.ink }}
-                        >
-                          {indicador.modelo}
-                        </Typography>
-                        <Divider sx={{ my: 1.25 }} />
-                        <Stack spacing={0.5}>
-                          <DataRow label="BP 2025" value={indicador.bp_2025} />
-                          <DataRow
-                            label="Whole YTD"
-                            value={indicador.whole_ytd}
-                          />
-                          <DataRow
-                            label="Retail YTD"
-                            value={indicador.retail_ytd}
-                          />
-                          <DataRow
-                            label="Avance"
-                            value={`${indicador.porcentaje_avance}%`}
-                          />
-                          <DataRow
-                            label="Inventario"
-                            value={indicador.inventario}
-                          />
-                          <DataRow
-                            label="Back order"
-                            value={indicador.back_order}
-                          />
-                        </Stack>
-                      </InnerCard>
-                    </Grid>
-                  ))}
-                </Grid>
-              </SectionCard>
-            )}
-
             {datosDistribuidor.comentarios_adicionales && (
               <SectionCard
                 title="Comentarios adicionales"
@@ -894,9 +847,37 @@ const DetalleVisitas = () => {
           </>
         )}
 
+        {visita.training_data && (
+          <SectionCard
+            title="Datos de Capacitación"
+            icon={<SchoolIcon sx={{ fontSize: 20 }} />}
+            accent={palette.capacitacion}
+          >
+            <Grid container spacing={3}>
+              <InfoItem
+                label="Tipo"
+                value={getTipo(visita.training_data.tipo)}
+              />
+              <InfoItem
+                label="Tema principal"
+                value={visita.training_data.tema_principal}
+              />
+              <InfoItem
+                label="Número de personas"
+                value={visita.training_data.num_personas}
+              />
+              <InfoItem
+                label="Comentarios"
+                value={visita.training_data.comentarios}
+                xs={12}
+              />
+            </Grid>
+          </SectionCard>
+        )}
+
         {visita.followup_agreements?.length > 0 && (
           <SectionCard
-            title="Acuerdos y seguimiento"
+            title="Acuerdos / Actividades"
             icon={<HandshakeIcon sx={{ fontSize: 20 }} />}
             accent={palette.acuerdos}
           >
@@ -1086,30 +1067,43 @@ const DetalleVisitas = () => {
           </SectionCard>
         )}
 
-        {visita.training_data && (
+        {datosDistribuidor?.commercial_indicators?.length > 0 && (
           <SectionCard
-            title="Capacitación"
-            icon={<SchoolIcon sx={{ fontSize: 20 }} />}
-            accent={palette.capacitacion}
+            title="Indicadores comerciales"
+            icon={<AssignmentIcon sx={{ fontSize: 20 }} />}
+            accent={palette.distribuidor}
           >
-            <Grid container spacing={3}>
-              <InfoItem
-                label="Tipo"
-                value={getTipo(visita.training_data.tipo)}
-              />
-              <InfoItem
-                label="Tema principal"
-                value={visita.training_data.tema_principal}
-              />
-              <InfoItem
-                label="Número de personas"
-                value={visita.training_data.num_personas}
-              />
-              <InfoItem
-                label="Comentarios"
-                value={visita.training_data.comentarios}
-                xs={12}
-              />
+            <Grid container spacing={2}>
+              {datosDistribuidor.commercial_indicators.map((indicador) => (
+                <Grid item xs={12} md={6} lg={4} key={indicador.id}>
+                  <InnerCard>
+                    <Typography fontWeight={700} sx={{ color: palette.ink }}>
+                      {indicador.modelo}
+                    </Typography>
+                    <Divider sx={{ my: 1.25 }} />
+                    <Stack spacing={0.5}>
+                      <DataRow label="BP 2025" value={indicador.bp_2025} />
+                      <DataRow label="Whole YTD" value={indicador.whole_ytd} />
+                      <DataRow
+                        label="Avance"
+                        value={`${indicador.porcentaje_avance}%`}
+                      />
+                      <DataRow
+                        label="Retail YTD"
+                        value={indicador.retail_ytd}
+                      />
+                      <DataRow
+                        label="Inventario"
+                        value={indicador.inventario}
+                      />
+                      <DataRow
+                        label="Back order"
+                        value={indicador.back_order}
+                      />
+                    </Stack>
+                  </InnerCard>
+                </Grid>
+              ))}
             </Grid>
           </SectionCard>
         )}

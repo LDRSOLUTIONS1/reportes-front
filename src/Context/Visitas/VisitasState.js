@@ -1,7 +1,11 @@
 import React, { useReducer } from "react";
 import VisitasContext from "./VisitasContext";
 import VisitasReducer from "./VisitasReducer";
-import MethodGet, { MethodGetPDF, MethodPost, MethodPut } from "../../Config/Service";
+import MethodGet, {
+  MethodGetPDF,
+  MethodPost,
+  MethodPut,
+} from "../../Config/Service";
 import Swal from "sweetalert2";
 import {
   GET_VISITAS,
@@ -103,7 +107,7 @@ const VisitasState = ({ children }) => {
         title: "Éxito",
         text: "Visita actualizada correctamente",
         icon: "success",
-      }).then(() => (window.location.href = "/visitas"));
+      });
 
       GetVisitas();
 
