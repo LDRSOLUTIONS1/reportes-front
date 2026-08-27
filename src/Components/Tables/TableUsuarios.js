@@ -261,6 +261,7 @@ export default function TableUsuarios({ rows = [] }) {
           handleClose={handleClickCloseEdit}
           id={id_usuario}
           roles={roles}
+          rows={rows}
         />
       )}
 
@@ -268,6 +269,7 @@ export default function TableUsuarios({ rows = [] }) {
         open={modalAdd}
         handleClose={handleClickCloseAdd}
         roles={roles}
+        rows={rows}
       />
     </>
   );

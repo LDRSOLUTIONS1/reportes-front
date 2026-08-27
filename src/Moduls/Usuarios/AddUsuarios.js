@@ -5,21 +5,33 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Grid, MenuItem } from "@mui/material";
 import { useContext } from "react";
 import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 
-export default function AddUsuarios({ open, handleClose, roles }) {
+export default function AddUsuarios({ open, handleClose, roles, rows }) {
   const { CreateUsuarios } = useContext(UsuariosContext);
 
   const {
     register,
+    control,
+    watch,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      collaborator_number: "",
+      name: "",
+      email: "",
+      role_id: "",
+      manager_id: "",
+    },
+  });
 
-  const onSubmit = (data, e) => {
+  const selectedRole = watch("role_id");
+
+  const onSubmit = (data) => {
     CreateUsuarios(data);
     handleClose();
   };
@@ -98,6 +110,37 @@ export default function AddUsuarios({ open, handleClose, roles }) {
                 ))}
               </TextField>
             </Grid>
+            {String(selectedRole) === "3" && (
+              <Grid size={12}>
+                <Controller
+                  name="manager_id"
+                  control={control}
+                  rules={{
+                    required: "Debes seleccionar un manager",
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      select
+                      fullWidth
+                      label="Selecciona un manager"
+                      {...field}
+                      error={!!errors.manager_id}
+                      helperText={errors.manager_id?.message}
+                    >
+                      <MenuItem value="">
+                        <em>-- Selecciona un manager --</em>
+                      </MenuItem>
+
+                      {rows.map((r) => (
+                        <MenuItem key={r.id} value={r.id}>
+                          {r.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Grid>
+            )}
           </Grid>
         </DialogContent>
         <DialogActions>

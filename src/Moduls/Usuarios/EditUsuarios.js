@@ -11,7 +11,7 @@ import { Grid, MenuItem } from "@mui/material";
 import MethodGet from "../../Config/Service";
 import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 
-export default function EditUsuarios({ open, handleClose, id, roles }) {
+export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
   const { EditUsuarios } = useContext(UsuariosContext);
 
   const [userData, setUserData] = useState(null);
@@ -23,12 +23,14 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
     formState: { errors },
     handleSubmit,
     reset,
+    watch,
   } = useForm({
     defaultValues: {
       external_rh_id: "",
       name: "",
       email: "",
       role_id: "",
+      manager_id: "",
       estado: "",
     },
   });
@@ -50,6 +52,7 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
         name: userData.name || "",
         email: userData.email || "",
         role_id: userData.role_id || "",
+        manager_id: userData.manager_id || "",
         estado: userData.estado || "",
       });
     }
@@ -83,6 +86,7 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
     { id: 2, nombre: "Activo" },
   ];
 
+  const selectedRole = watch("role_id");
   return (
     <Dialog open={open} onClose={handleDialogClose} fullWidth maxWidth="sm">
       <DialogTitle>Editar usuario</DialogTitle>
@@ -169,6 +173,35 @@ export default function EditUsuarios({ open, handleClose, id, roles }) {
                 )}
               />
             </Grid>
+
+            {String(selectedRole) === "3" && (
+              <Grid size={12}>
+                <Controller
+                  name="manager_id"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      select
+                      fullWidth
+                      label="Selecciona un manager"
+                      {...field}
+                      error={!!errors.manager_id}
+                      helperText={errors.manager_id?.message}
+                    >
+                      <MenuItem value="">
+                        <em>-- Selecciona un manager --</em>
+                      </MenuItem>
+
+                      {rows.map((r) => (
+                        <MenuItem key={r.id} value={r.id}>
+                          {r.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Grid>
+            )}
 
             <Grid size={12}>
               <Controller

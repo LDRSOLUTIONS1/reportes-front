@@ -58,7 +58,7 @@ export default function TableVisitas({ rows = [] }) {
             onClick={() => navigate(`/DetalleVisita/${params.id}`)}
           />,
         ];
-        if (role_id !== "3") {
+        if (role_id !== "4") {
           actions.push(
             <GridActionsCellItem
               icon={<EditIcon sx={{ color: "#ed6c02" }} />}
@@ -232,7 +232,7 @@ export default function TableVisitas({ rows = [] }) {
                   }}
                 >
                   <Typography fontWeight={600}>Total: {rows.length}</Typography>
-                  {role_id !== "3" && (
+                  {role_id !== "4" && (
                     <Button
                       variant="contained"
                       startIcon={<AddIcon />}
