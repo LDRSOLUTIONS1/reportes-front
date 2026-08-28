@@ -11,6 +11,7 @@ const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem("token"),
     authenticated: false,
+    usuario: {},
     user: {},
     loading: true,
     success: false,
@@ -78,6 +79,7 @@ const AuthState = (props) => {
       value={{
         token: state.token,
         authenticated: state.authenticated,
+        usuario: state.usuario,
         user: state.user,
         success: state.success,
         loading: state.loading,

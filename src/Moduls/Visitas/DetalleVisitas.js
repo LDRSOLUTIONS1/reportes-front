@@ -333,7 +333,7 @@ const DetalleVisitas = () => {
               label="Fecha de término"
               value={formatDate(visita.fecha_fin)}
             />
-            <InfoItem label="Segmento" value={visita.segmento} />
+            <InfoItem label="Segmento" value={visita.segment.name} />
             <InfoItem label="Objetivo" value={visita.objetivo} xs={12} />
             <InfoItem
               label="Logros / Estrategia"

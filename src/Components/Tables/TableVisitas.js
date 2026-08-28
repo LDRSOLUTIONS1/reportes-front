@@ -149,7 +149,7 @@ export default function TableVisitas({ rows = [] }) {
       minWidth: 100,
     },
     {
-      field: "segmento",
+      field: "segment_id",
       headerName: "Segmento",
       flex: 1,
       align: "center",

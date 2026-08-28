@@ -23,7 +23,7 @@ const stepInformacionGeneral = {
     "tipo_visita",
     "objetivo",
     "logros_estrategia",
-    "segmento",
+    "segment_id",
     "fecha_inicio",
     "fecha_fin",
   ],

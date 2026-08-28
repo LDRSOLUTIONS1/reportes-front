@@ -6,6 +6,7 @@ const AuthReducer = (state, action) => {
       return {
         ...state,
         authenticated: true,
+        usuario: action.payload,
         user: action.payload,
         loading: false,
       };

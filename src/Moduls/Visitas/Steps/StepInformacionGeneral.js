@@ -1,15 +1,18 @@
-import React from "react";
-import { Grid, TextField } from "@mui/material";
+import React, { useContext, useEffect } from "react";
+import { Grid, TextField, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import SelectField from "../../../Components/Forms/Select";
+import AuthContext from "../../../Context/Auth/AuthContext";
 
 const StepInformacionGeneral = () => {
   const {
     register,
     control,
     watch,
+    setValue,
     formState: { errors },
   } = useFormContext();
+  const { usuario } = useContext(AuthContext);
 
   const visitType = watch("visit_type");
 
@@ -27,6 +30,17 @@ const StepInformacionGeneral = () => {
     { id: "capacitacion", nombre: "Capacitación" },
     { id: "otro", nombre: "Otro" },
   ];
+
+  useEffect(() => {
+    const segmentId = usuario?.user?.segment?.id;
+
+    if (segmentId) {
+      setValue("segment_id", segmentId, {
+        shouldValidate: true,
+        shouldDirty: false,
+      });
+    }
+  }, [usuario, setValue]);
 
   return (
     <Grid container spacing={2}>
@@ -86,15 +100,23 @@ const StepInformacionGeneral = () => {
         <TextField
           fullWidth
           label="Segmento"
+          disabled
+          value={usuario?.user?.segment?.name ?? ""}
           InputLabelProps={{ shrink: true }}
-          {...register("segmento", {
-            required: "Este campo es obligatorio",
-            minLength: { value: 1, message: "Mínimo 1 carácter" },
-            maxLength: { value: 100, message: "Máximo 100 caracteres" },
-          })}
-          error={!!errors.segmento}
-          helperText={errors.segmento?.message}
         />
+
+        <input
+          type="hidden"
+          {...register("segment_id", {
+            required: "El segmento es obligatorio",
+          })}
+        />
+
+        {errors.segment_id && (
+          <Typography color="error" variant="caption">
+            {errors.segment_id.message}
+          </Typography>
+        )}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>

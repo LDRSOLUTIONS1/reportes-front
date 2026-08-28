@@ -115,9 +115,6 @@ export default function AddUsuarios({ open, handleClose, roles, rows }) {
                 <Controller
                   name="manager_id"
                   control={control}
-                  rules={{
-                    required: "Debes seleccionar un manager",
-                  }}
                   render={({ field }) => (
                     <TextField
                       select
@@ -141,7 +138,7 @@ export default function AddUsuarios({ open, handleClose, roles, rows }) {
                 />
               </Grid>
             )}
-          </Grid>
+          </Grid> 
         </DialogContent>
         <DialogActions>
           <Button
