@@ -11,7 +11,14 @@ import { Grid, MenuItem } from "@mui/material";
 import MethodGet from "../../Config/Service";
 import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 
-export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
+export default function EditUsuarios({
+  open,
+  handleClose,
+  id,
+  roles,
+  rows,
+  segmentos,
+}) {
   const { EditUsuarios } = useContext(UsuariosContext);
 
   const [userData, setUserData] = useState(null);
@@ -31,6 +38,7 @@ export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
       email: "",
       role_id: "",
       manager_id: "",
+      segment_id: "",
       estado: "",
     },
   });
@@ -53,6 +61,7 @@ export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
         email: userData.email || "",
         role_id: userData.role_id || "",
         manager_id: userData.manager_id || "",
+        segment_id: userData.segment_id || "",
         estado: userData.estado || "",
       });
     }
@@ -104,6 +113,7 @@ export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
           <Grid container spacing={2}>
             <Grid size={12}>
               <TextField
+                type="number"
                 fullWidth
                 label="Número de colaborador"
                 InputLabelProps={{ shrink: true }}
@@ -134,6 +144,7 @@ export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
             </Grid>
             <Grid size={12}>
               <TextField
+                type="email"
                 fullWidth
                 label="Correo electrónico"
                 InputLabelProps={{ shrink: true }}
@@ -202,6 +213,36 @@ export default function EditUsuarios({ open, handleClose, id, roles, rows }) {
                 />
               </Grid>
             )}
+
+            <Grid size={12}>
+              <Controller
+                name="segment_id"
+                control={control}
+                rules={{
+                  required: "Este campo es obligatorio",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    fullWidth
+                    label="Segmento"
+                    {...field}
+                    error={!!errors.segment_id}
+                    helperText={errors.segment_id?.message}
+                  >
+                    <MenuItem value="">
+                      <em>-- Selecciona un segmento --</em>
+                    </MenuItem>
+
+                    {segmentos.map((s) => (
+                      <MenuItem key={s.id} value={s.id}>
+                        {s.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
 
             <Grid size={12}>
               <Controller

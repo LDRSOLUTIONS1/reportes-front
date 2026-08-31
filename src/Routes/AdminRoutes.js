@@ -8,6 +8,7 @@ import AddVisitas from "../Moduls/Visitas/AddVisitas";
 import EditVisitas from "../Moduls/Visitas/EditVisitas";
 import Acuerdos from "../Moduls/Acuerdos/Acuerdos";
 import DetalleVisitas from "../Moduls/Visitas/DetalleVisitas";
+import Segmentos from "../Moduls/Segmentos/Segmentos";
 
 const AdminRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AdminRoutes = () => {
       <Route path="/EditarVisita/:id" element={<EditVisitas />} />
       <Route path="/DetalleVisita/:id" element={<DetalleVisitas />} />
       <Route path="/Acuerdos" element={<Acuerdos />} />
+      <Route path="/Segmentos" element={<Segmentos />} />
 
       <Route path="/no-resultados" element={<NoResultados />} />
       <Route path="*" element={<NoResultados />} />

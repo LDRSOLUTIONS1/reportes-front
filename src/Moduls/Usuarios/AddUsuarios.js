@@ -10,7 +10,13 @@ import { Grid, MenuItem } from "@mui/material";
 import { useContext } from "react";
 import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
 
-export default function AddUsuarios({ open, handleClose, roles, rows }) {
+export default function AddUsuarios({
+  open,
+  handleClose,
+  roles,
+  rows,
+  segmentos,
+}) {
   const { CreateUsuarios } = useContext(UsuariosContext);
 
   const {
@@ -52,6 +58,7 @@ export default function AddUsuarios({ open, handleClose, roles, rows }) {
           <Grid container spacing={2}>
             <Grid size={12}>
               <TextField
+                type="number"
                 fullWidth
                 label="Número de colaborador"
                 {...register("collaborator_number", {
@@ -78,6 +85,7 @@ export default function AddUsuarios({ open, handleClose, roles, rows }) {
             </Grid>
             <Grid size={12}>
               <TextField
+                type="email"
                 fullWidth
                 label="Correo electrónico"
                 {...register("email", {
@@ -138,7 +146,33 @@ export default function AddUsuarios({ open, handleClose, roles, rows }) {
                 />
               </Grid>
             )}
-          </Grid> 
+            <Grid size={12}>
+              <Controller
+                name="segment_id"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    fullWidth
+                    label="Selecciona un segmento"
+                    {...field}
+                    error={!!errors.segment_id}
+                    helperText={errors.segment_id?.message}
+                  >
+                    <MenuItem value="">
+                      <em>-- Selecciona un segmento --</em>
+                    </MenuItem>
+
+                    {segmentos.map((s) => (
+                      <MenuItem key={s.id} value={s.id}>
+                        {s.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button

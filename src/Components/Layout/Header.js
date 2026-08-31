@@ -13,6 +13,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import TourIcon from "@mui/icons-material/Tour";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import HistoryIcon from "@mui/icons-material/History";
+import SegmentIcon from "@mui/icons-material/Segment";
 
 const theme = createTheme({
   cssVariables: {
@@ -39,6 +40,12 @@ const MODULOS = [
     segment: "Acuerdos",
     title: "Acuerdos",
     icon: <TaskAltIcon />,
+  },
+  {
+    id: 8,
+    segment: "Segmentos",
+    title: "Segmentos",
+    icon: <SegmentIcon />,
   },
   {
     id: 4,
@@ -123,11 +130,11 @@ export default function Header({ children }) {
         title: "Regresar a la intranet",
         icon: <KeyboardReturnIcon />,
       },
-      {
-        segment: "manual-usuario",
-        title: "Manual de usuario",
-        icon: <DescriptionIcon />,
-      },
+      // {
+      //   segment: "manual-usuario",
+      //   title: "Manual de usuario",
+      //   icon: <DescriptionIcon />,
+      // },
     ];
   }, [role_id]);
 

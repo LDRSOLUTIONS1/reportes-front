@@ -31,10 +31,8 @@ const getNombreRol = (roleId) => {
   const roles = {
     1: "Super Administrador",
     2: "Administrador",
-    3: "Interno",
-    4: "Externo",
-    5: "Gubernamental",
-    6: "Distribuidor",
+    3: "Manager",
+    4: "Visualizador",
   };
 
   return roles[Number(roleId)] || "Usuario";

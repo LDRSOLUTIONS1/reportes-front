@@ -7,6 +7,7 @@ import Visitas from "../Moduls/Visitas/Visitas";
 import DetalleVisitas from "../Moduls/Visitas/DetalleVisitas";
 import AddVisitas from "../Moduls/Visitas/AddVisitas";
 import EditVisitas from "../Moduls/Visitas/EditVisitas";
+import Segmentos from "../Moduls/Segmentos/Segmentos";
 
 const ManagerRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const ManagerRoutes = () => {
       <Route path="/NuevaVisita" element={<AddVisitas />} />
       <Route path="/EditarVisita/:id" element={<EditVisitas />} />
       <Route path="/DetalleVisita/:id" element={<DetalleVisitas />} />
+      <Route path="/Segmentos" element={<Segmentos />} />
 
       <Route path="/no-resultados" element={<NoResultados />} />
       <Route path="*" element={<NoResultados />} />

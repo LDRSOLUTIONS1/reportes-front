@@ -1,46 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import ModalDetalleUsuarios from "../Modals/ModalDetalleUsuarios";
-import UsuariosContext from "../../Context/Usuarios/UsuariosContext";
+import ModalDetalleSegmentos from "../Modals/ModalDetalleSegmentos";
+import SegmentosContext from "../../Context/Segmentos/SegmentosContext";
 import EditIcon from "@mui/icons-material/Edit";
 import { dateFormatter } from "../../Utils/dateFormatter";
-import EditUsuarios from "../../Moduls/Usuarios/EditUsuarios";
+import EditSegmentos from "../../Moduls/Segmentos/EditSegmentos";
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
-import AddUsuarios from "../../Moduls/Usuarios/AddUsuarios";
+import AddSegmentos from "../../Moduls/Segmentos/AddSegmentos";
 import { EstadoChip } from "../../Utils/EstadoChip";
 import { esES } from "@mui/x-data-grid/locales";
-import RolesContext from "../../Context/Roles/RolesContext";
-import SegmentosContext from "../../Context/Segmentos/SegmentosContext";
 
-export default function TableUsuarios({ rows = [] }) {
-  const { usuario, GetUsuario } = useContext(UsuariosContext);
-  const { roles, GetRoles } = useContext(RolesContext);
-  const { segmentos, GetSegmentos } = useContext(SegmentosContext);
+export default function TableSegmentos({ rows = [] }) {
+  const { segmento, GetSegmento } = useContext(SegmentosContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const role_id = localStorage.getItem("role_id");
 
   const [openModal, setOpenModal] = useState(false);
   const handleClickOpen = async (id) => {
-    await GetUsuario(id);
+    await GetSegmento(id);
     setOpenModal(true);
   };
-
   const handleClose = () => {
     setOpenModal(false);
   };
 
   const [modalUpdate, OpenModalUpdate] = useState(false);
-  const [id_usuario, saveIdUsuario] = useState(null);
+  const [id_segmento, saveIdSegmento] = useState(null);
   const handleClickOpenEdit = (id) => {
     OpenModalUpdate(true);
-    saveIdUsuario(id);
+    saveIdSegmento(id);
   };
   const handleClickCloseEdit = () => {
     OpenModalUpdate(false);
-    saveIdUsuario(null);
+    saveIdSegmento(null);
   };
 
   const [modalAdd, setOpenModalAdd] = useState(false);
@@ -51,11 +47,6 @@ export default function TableUsuarios({ rows = [] }) {
   const handleClickCloseAdd = () => {
     setOpenModalAdd(false);
   };
-
-  useEffect(() => {
-    GetRoles();
-    GetSegmentos();
-  }, []);
 
   const columns = [
     {
@@ -73,12 +64,17 @@ export default function TableUsuarios({ rows = [] }) {
             label="Ver detalles"
             onClick={() => handleClickOpen(params.id)}
           />,
-          <GridActionsCellItem
-            icon={<EditIcon sx={{ color: "#ed6c02" }} />}
-            label="Editar"
-            onClick={() => handleClickOpenEdit(params.id)}
-          />,
         ];
+        if (role_id !== "4") {
+          actions.push(
+            <GridActionsCellItem
+              icon={<EditIcon sx={{ color: "#ed6c02" }} />}
+              label="Editar"
+              onClick={() => handleClickOpenEdit(params.id)}
+            />,
+          );
+        }
+
         return actions;
       },
     },
@@ -91,55 +87,20 @@ export default function TableUsuarios({ rows = [] }) {
       minWidth: 100,
     },
     {
-      field: "collaborator_number",
-      headerName: "Número de colaborador",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-    },
-    {
       field: "name",
-      headerName: "Nombre completo",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-    },
-    {
-      field: "email",
-      headerName: "Correo electrónico",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-    },
-    {
-      field: "rol",
-      headerName: "Rol",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 100,
-      valueGetter: (value, row) => row.role?.name ?? "N/A",
-    },
-    {
-      field: "manager",
-      headerName: "Manager de",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      minWidth: 200,
-      valueGetter: (value, row) => row.manager?.name ?? "Sin manager",
-    },
-    {
-      field: "segment",
       headerName: "Segmento",
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 150,
-      valueGetter: (value, row) => row.segment?.name ?? "Sin segmento",
+      minWidth: 100,
+    },
+    {
+      field: "description",
+      headerName: "Descripción",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 100,
     },
     {
       field: "created_at",
@@ -177,7 +138,7 @@ export default function TableUsuarios({ rows = [] }) {
         }}
       >
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-          Lista de usuarios
+          Lista de segmentos
         </Typography>
 
         <Box
@@ -213,14 +174,16 @@ export default function TableUsuarios({ rows = [] }) {
                   }}
                 >
                   <Typography fontWeight={600}>Total: {rows.length}</Typography>
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleClickOpenAdd}
-                    sx={{ borderRadius: 3 }}
-                  >
-                    Nuevo rol
-                  </Button>
+                  {role_id !== "4" && (
+                    <Button
+                      variant="contained"
+                      startIcon={<AddIcon />}
+                      onClick={handleClickOpenAdd}
+                      sx={{ borderRadius: 3 }}
+                    >
+                      Nuevo segmento
+                    </Button>
+                  )}
                 </Box>
               ),
             }}
@@ -270,30 +233,21 @@ export default function TableUsuarios({ rows = [] }) {
           />
         </Box>
       </Paper>
-      <ModalDetalleUsuarios
+      <ModalDetalleSegmentos
         open={openModal}
         handleClose={handleClose}
-        usuario={usuario}
+        segmento={segmento}
       />
 
-      {id_usuario !== null && (
-        <EditUsuarios
+      {id_segmento !== null && (
+        <EditSegmentos
           open={modalUpdate}
           handleClose={handleClickCloseEdit}
-          id={id_usuario}
-          roles={roles}
-          rows={rows}
-          segmentos={segmentos}
+          id={id_segmento}
         />
       )}
 
-      <AddUsuarios
-        open={modalAdd}
-        handleClose={handleClickCloseAdd}
-        roles={roles}
-        rows={rows}
-        segmentos={segmentos}
-      />
+      <AddSegmentos open={modalAdd} handleClose={handleClickCloseAdd} />
     </>
   );
 }
