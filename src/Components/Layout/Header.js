@@ -130,11 +130,11 @@ export default function Header({ children }) {
         title: "Regresar a la intranet",
         icon: <KeyboardReturnIcon />,
       },
-      // {
-      //   segment: "manual-usuario",
-      //   title: "Manual de usuario",
-      //   icon: <DescriptionIcon />,
-      // },
+      {
+        segment: "manual-usuario",
+        title: "Manual de usuario",
+        icon: <DescriptionIcon />,
+      },
     ];
   }, [role_id]);
 
