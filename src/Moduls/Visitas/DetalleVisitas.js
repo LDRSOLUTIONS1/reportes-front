@@ -39,6 +39,77 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import DescriptionIcon from "@mui/icons-material/Description";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import SlideshowIcon from "@mui/icons-material/Slideshow";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+
+const getExtension = (filename = "") =>
+  filename.split(".").pop()?.toLowerCase() || "";
+
+const isImageFile = (filename = "", mimeType = "") => {
+  if (mimeType && mimeType.startsWith("image/")) {
+    return true;
+  }
+
+  const extension = getExtension(filename);
+
+  return [
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "webp",
+    "bmp",
+    "svg",
+    "heic",
+    "heif",
+  ].includes(extension);
+};
+
+const getFileTypeInfo = (filename = "") => {
+  const extension = getExtension(filename);
+
+  if (extension === "pdf") {
+    return {
+      icon: PictureAsPdfIcon,
+      color: "#D32F2F",
+      label: "PDF",
+    };
+  }
+
+  if (["doc", "docx"].includes(extension)) {
+    return {
+      icon: DescriptionIcon,
+      color: "#2B579A",
+      label: "Word",
+    };
+  }
+
+  if (["xls", "xlsx", "csv"].includes(extension)) {
+    return {
+      icon: TableChartIcon,
+      color: "#217346",
+      label: "Excel",
+    };
+  }
+
+  if (["ppt", "pptx"].includes(extension)) {
+    return {
+      icon: SlideshowIcon,
+      color: "#D24726",
+      label: "PowerPoint",
+    };
+  }
+
+  return {
+    icon: InsertDriveFileIcon,
+    color: "text.disabled",
+    label: "Archivo",
+  };
+};
 
 const DetalleVisitas = () => {
   const theme = useTheme();
@@ -1115,32 +1186,95 @@ const DetalleVisitas = () => {
             accent={palette.evidencias}
           >
             <ImageList cols={3} gap={16}>
-              {visita.attachments.map((archivo) => (
-                <ImageListItem
-                  key={archivo.id}
-                  onClick={() => setLightbox(archivo)}
-                  sx={{
-                    cursor: "zoom-in",
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    "&:hover img": { transform: "scale(1.05)" },
-                  }}
-                >
-                  <img
-                    src={archivo.url}
-                    alt={archivo.filename}
-                    loading="lazy"
-                    style={{
-                      width: "100%",
-                      height: 220,
-                      objectFit: "cover",
-                      borderRadius: 8,
-                      transition: "transform 220ms ease",
-                      display: "block",
+              {visita.attachments.map((archivo) => {
+                const esImagen = isImageFile(archivo.filename, archivo.mime_type);
+                const { icon: FileIcon, color, label } = getFileTypeInfo(
+                  archivo.filename,
+                );
+
+                return (
+                  <ImageListItem
+                    key={archivo.id}
+                    onClick={() =>
+                      esImagen
+                        ? setLightbox(archivo)
+                        : window.open(archivo.url, "_blank")
+                    }
+                    sx={{
+                      cursor: esImagen ? "zoom-in" : "pointer",
+                      borderRadius: 2,
+                      overflow: "hidden",
+                      "&:hover img": { transform: "scale(1.05)" },
                     }}
-                  />
-                </ImageListItem>
-              ))}
+                  >
+                    {esImagen ? (
+                      <img
+                        src={archivo.url}
+                        alt={archivo.filename}
+                        loading="lazy"
+                        style={{
+                          width: "100%",
+                          height: 220,
+                          objectFit: "cover",
+                          borderRadius: 8,
+                          transition: "transform 220ms ease",
+                          display: "block",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: 220,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: 1,
+                          bgcolor: theme.palette.action.hover,
+                          borderRadius: 1,
+                          transition:
+                            "background-color 150ms ease, transform 150ms ease",
+                          "&:hover": {
+                            bgcolor: theme.palette.action.selected,
+                          },
+                        }}
+                      >
+                        <FileIcon sx={{ fontSize: 56, color }} />
+                        <Typography
+                          variant="caption"
+                          sx={{ color: palette.muted, fontWeight: 600 }}
+                        >
+                          {label}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          noWrap
+                          title={archivo.filename}
+                          sx={{
+                            px: 1.5,
+                            maxWidth: "90%",
+                            color: theme.palette.text.disabled,
+                          }}
+                        >
+                          {archivo.filename}
+                        </Typography>
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                          sx={{ color: palette.muted }}
+                        >
+                          <OpenInNewIcon sx={{ fontSize: 14 }} />
+                          <Typography variant="caption">
+                            Abrir archivo
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    )}
+                  </ImageListItem>
+                );
+              })}
             </ImageList>
           </SectionCard>
         )}

@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  useTheme,
+  useMediaQuery,
+  CircularProgress,
+} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -17,7 +24,7 @@ export default function TableVisitas({ rows = [] }) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const role_id = localStorage.getItem("role_id");
-  const { descargarPDF } = useContext(VisitasContext);
+  const { descargarPDF, loadingPdfIds } = useContext(VisitasContext);
 
   const visit_type = [
     { id: "cliente_directo", nombre: "Cliente directo" },
@@ -51,6 +58,7 @@ export default function TableVisitas({ rows = [] }) {
       minWidth: 100,
       type: "actions",
       getActions: (params) => {
+        const descargando = loadingPdfIds?.includes(params.id);
         const actions = [
           <GridActionsCellItem
             icon={<VisibilityIcon sx={{ color: "#42A5F5" }} />}
@@ -69,8 +77,15 @@ export default function TableVisitas({ rows = [] }) {
         }
         actions.push(
           <GridActionsCellItem
-            icon={<PictureAsPdfIcon sx={{ color: "#d32f2f" }} />}
-            label="Descargar PDF"
+            icon={
+              descargando ? (
+                <CircularProgress size={20} thickness={5} />
+              ) : (
+                <PictureAsPdfIcon sx={{ color: "#d32f2f" }} />
+              )
+            }
+            label={descargando ? "Descargando..." : "Descargar PDF"}
+            disabled={descargando}
             onClick={() => descargarPDF(params.id)}
           />,
         );

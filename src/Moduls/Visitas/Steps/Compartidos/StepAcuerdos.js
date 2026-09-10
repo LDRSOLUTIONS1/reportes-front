@@ -106,7 +106,7 @@ const StepAcuerdos = ({ mode }) => {
         {
           name: "acuerdo",
           label: "Acuerdo",
-          type: "text",
+          type: "textarea",
           rules: {
             required: "Requerido",
           },

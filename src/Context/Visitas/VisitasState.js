@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import VisitasContext from "./VisitasContext";
 import VisitasReducer from "./VisitasReducer";
 import MethodGet, {
@@ -24,6 +24,7 @@ const VisitasState = ({ children }) => {
   };
 
   const [state, dispatch] = useReducer(VisitasReducer, initialState);
+  const [loadingPdfIds, setLoadingPdfIds] = useState([]);
 
   const handleError = (error) => {
     if (!error.response) {
@@ -200,6 +201,10 @@ const VisitasState = ({ children }) => {
   };
 
   const descargarPDF = async (id) => {
+    if (loadingPdfIds.includes(id)) {
+      return;
+    }
+
     const result = await Swal.fire({
       title: "¿Descargar PDF?",
       text: "¿Deseas descargar el reporte de esta visita en formato PDF?",
@@ -215,6 +220,7 @@ const VisitasState = ({ children }) => {
     if (!result.isConfirmed) {
       return;
     }
+    setLoadingPdfIds((prev) => [...prev, id]);
 
     try {
       const res = await MethodGetPDF(
@@ -249,8 +255,11 @@ const VisitasState = ({ children }) => {
       });
     } catch (error) {
       handleError(error);
+    } finally {
+      setLoadingPdfIds((prev) => prev.filter((pdfId) => pdfId !== id));
     }
   };
+
   return (
     <VisitasContext.Provider
       value={{
@@ -258,6 +267,7 @@ const VisitasState = ({ children }) => {
         visita: state.visita,
         ErrorsApi: state.ErrorsApi,
         success: state.success,
+        loadingPdfIds,
         GetVisitas,
         GetVisita,
         CreateVisitas,
