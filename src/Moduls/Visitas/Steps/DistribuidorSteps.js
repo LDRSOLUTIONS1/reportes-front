@@ -12,7 +12,11 @@ const DistribuidorSteps = [
     fields: ["distribuidor", "plaza", "grupo"],
   },
   { label: "Acompañamiento", component: StepAcompanamiento, fields: [] },
-  { label: "Capacitación", component: StepCapacitacion, fields: [] },
+  {
+    label: "Capacitación",
+    component: StepCapacitacion,
+    fields: ["tipo", "tema_principal", "num_personas", "comentarios"],
+  },
   { label: "Acuerdos y Actividades", component: StepAcuerdos, fields: [] },
   { label: "Indicadores Comerciales", component: StepIndicadores, fields: [] },
   { label: "Evidencias", component: StepEvidencias, fields: [] },

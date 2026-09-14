@@ -2,6 +2,7 @@ import React from "react";
 import { Grid, TextField } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import SelectField from "../../../../Components/Forms/Select";
+import { validarCampoObligatorio } from "../../../../Utils/validations";
 
 const StepCapacitacion = () => {
   const {
@@ -36,6 +37,7 @@ const StepCapacitacion = () => {
           InputLabelProps={{ shrink: true }}
           {...register("tema_principal", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -52,6 +54,7 @@ const StepCapacitacion = () => {
           InputLabelProps={{ shrink: true }}
           {...register("num_personas", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -67,6 +70,7 @@ const StepCapacitacion = () => {
           InputLabelProps={{ shrink: true }}
           {...register("comentarios", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}

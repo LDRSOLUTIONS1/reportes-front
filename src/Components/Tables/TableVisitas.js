@@ -170,6 +170,7 @@ export default function TableVisitas({ rows = [] }) {
       align: "center",
       headerAlign: "center",
       minWidth: 100,
+      valueGetter: (_, row) => row.segment?.name ?? "Sin segmento",
     },
     {
       field: "fecha_visita",

@@ -60,8 +60,6 @@ export default function TableAcuerdos({ rows = [] }) {
       align: "center",
       headerAlign: "center",
       minWidth: 220,
-      sortable: false,
-      filterable: false,
       valueGetter: (value, row) => {
         const vr = row.visit_report;
         if (!vr) return "";

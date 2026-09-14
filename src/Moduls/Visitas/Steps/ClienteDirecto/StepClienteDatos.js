@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import SelectField from "../../../../Components/Forms/Select";
+import { validarCampoObligatorio } from "../../../../Utils/validations";
 
 const StepClienteDatos = () => {
   const {
@@ -59,6 +60,7 @@ const StepClienteDatos = () => {
           InputLabelProps={{ shrink: true }}
           {...register("razon_social", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -74,6 +76,7 @@ const StepClienteDatos = () => {
           InputLabelProps={{ shrink: true }}
           {...register("ubicaciones", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -105,6 +108,7 @@ const StepClienteDatos = () => {
           InputLabelProps={{ shrink: true }}
           {...register("giro", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -120,6 +124,7 @@ const StepClienteDatos = () => {
           InputLabelProps={{ shrink: true }}
           {...register("rutas", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -135,6 +140,7 @@ const StepClienteDatos = () => {
           InputLabelProps={{ shrink: true }}
           {...register("cobertura", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}

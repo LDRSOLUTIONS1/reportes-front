@@ -16,8 +16,10 @@ const ClienteDirectoSteps = [
       "ubicaciones",
       "tamanio_flota",
       "giro",
+      "rutas",
       "cobertura",
       "tipo_cliente",
+      "edad_promedio_flota",
     ],
   },
   { label: "Contactos", component: StepContactos, fields: [] },
@@ -29,13 +31,20 @@ const ClienteDirectoSteps = [
     fields: [
       "modelo_interes",
       "tipo_carroceria",
+      "proyeccion_compra",
       "financiamiento",
       "tiempo_entrega",
       "lugar_entrega",
+      "distribuidor",
+      "demo",
     ],
   },
   { label: "Acuerdos y Actividades", component: StepAcuerdos, fields: [] },
-  { label: "Capacitación", component: StepCapacitacion, fields: [] },
+  {
+    label: "Capacitación",
+    component: StepCapacitacion,
+    fields: ["tipo", "tema_principal", "num_personas", "comentarios"],
+  },
   { label: "Evidencias", component: StepEvidencias, fields: [] },
 ];
 

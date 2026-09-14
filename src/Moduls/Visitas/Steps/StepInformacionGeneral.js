@@ -3,6 +3,7 @@ import { Grid, TextField, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import SelectField from "../../../Components/Forms/Select";
 import AuthContext from "../../../Context/Auth/AuthContext";
+import { validarCampoObligatorio } from "../../../Utils/validations";
 
 const StepInformacionGeneral = () => {
   const {
@@ -73,6 +74,7 @@ const StepInformacionGeneral = () => {
           InputLabelProps={{ shrink: true }}
           {...register("objetivo", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 carácter" },
             maxLength: { value: 100, message: "Máximo 100 caracteres" },
           })}
@@ -88,6 +90,7 @@ const StepInformacionGeneral = () => {
           InputLabelProps={{ shrink: true }}
           {...register("logros_estrategia", {
             required: "Este campo es obligatorio",
+            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 carácter" },
             maxLength: { value: 100, message: "Máximo 100 caracteres" },
           })}
