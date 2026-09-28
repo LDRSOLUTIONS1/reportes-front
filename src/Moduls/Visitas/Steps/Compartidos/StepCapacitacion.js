@@ -24,7 +24,6 @@ const StepCapacitacion = () => {
           name="tipo"
           label="Tipo"
           control={control}
-          rules={{ required: "Este campo es obligatorio" }}
           errors={errors}
           options={tipos}
         />
@@ -36,8 +35,6 @@ const StepCapacitacion = () => {
           label="Tema principal:"
           InputLabelProps={{ shrink: true }}
           {...register("tema_principal", {
-            required: "Este campo es obligatorio",
-            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -53,8 +50,6 @@ const StepCapacitacion = () => {
           label="N° Personas capacitadas"
           InputLabelProps={{ shrink: true }}
           {...register("num_personas", {
-            required: "Este campo es obligatorio",
-            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}
@@ -69,8 +64,6 @@ const StepCapacitacion = () => {
           label="Comentarios"
           InputLabelProps={{ shrink: true }}
           {...register("comentarios", {
-            required: "Este campo es obligatorio",
-            validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 caracteres" },
             maxLength: { value: 255, message: "Máximo 255 caracteres" },
           })}

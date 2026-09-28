@@ -76,7 +76,7 @@ const StepInformacionGeneral = () => {
             required: "Este campo es obligatorio",
             validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 carácter" },
-            maxLength: { value: 100, message: "Máximo 100 caracteres" },
+            maxLength: { value: 200, message: "Máximo 200 caracteres" },
           })}
           error={!!errors.objetivo}
           helperText={errors.objetivo?.message}
@@ -92,7 +92,7 @@ const StepInformacionGeneral = () => {
             required: "Este campo es obligatorio",
             validate: validarCampoObligatorio,
             minLength: { value: 1, message: "Mínimo 1 carácter" },
-            maxLength: { value: 100, message: "Máximo 100 caracteres" },
+            maxLength: { value: 200, message: "Máximo 200 caracteres" },
           })}
           error={!!errors.logros_estrategia}
           helperText={errors.logros_estrategia?.message}
