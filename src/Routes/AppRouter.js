@@ -44,10 +44,10 @@ const AppRouter = () => {
     return <LoadingComponent loading={loading} />;
   }
 
-  // if (!authenticated && errorAuth) {
-  //   window.location.href = "https://ldrhsys.ldrhumanresources.com/";
-  //   return null;
-  // }
+  if (!authenticated && errorAuth) {
+    window.location.href = "https://ldrhsys.ldrhumanresources.com/";
+    return null;
+  }
 
   const role_id = localStorage.getItem("role_id");
   let PrivateComponent = null;
